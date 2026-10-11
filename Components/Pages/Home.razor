@@ -1,7 +1,69 @@
 ﻿@page "/"
+@using EnableDevMode.Components.Shared
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Enable Dev Mode</PageTitle>
 
-<h1>Hello, world!</h1>
+<section class="section split" style="align-items: center; padding-block: 80px 72px">
+    <div class="main stack" style="gap: var(--space-5)">
+        <p class="mono muted">dotnet new blazor --name YourNextApp</p>
+        <h1 class="display" style="max-width: 640px">Build real apps with Blazor and .NET.</h1>
+        <p class="lead" style="max-width: 540px">Complete project builds, from the first commit to deployment.
+            Watch the video, follow the lessons, and grab the code on GitHub.</p>
+        <div class="row">
+            <Button Href="/projects">Browse projects</Button>
+            <Button Href="@SiteLinks.YouTube" Kind="secondary" Icon="youtube" Target="_blank">Watch on YouTube</Button>
+        </div>
+    </div>
+    <div class="side panel" style="padding-bottom: var(--space-1)">
+        <div class="row" style="justify-content: space-between; margin-bottom: 20px">
+            <h2 class="label">Latest lessons</h2>
+            <span class="mono caption">main</span>
+        </div>
+        @if (latestLessons.Count > 0)
+        {
+            <CommitLog Items="latestLessons" />
+        }
+        else
+        {
+            <p class="small muted" style="padding-bottom: 20px">
+                The first lessons are being recorded. <a href="/#newsletter">Subscribe</a> to hear when they're out.
+            </p>
+        }
+    </div>
+</section>
 
-Welcome to your new app.
+<section class="section stack" style="padding-top: 0; gap: var(--space-6)">
+    <div class="row" style="justify-content: space-between; align-items: baseline">
+        <h2>Projects</h2>
+        @if (projects.Count > 0)
+        {
+            <a href="/projects" class="label" style="color: var(--accent)">See all projects</a>
+        }
+    </div>
+    @if (projects.Count > 0)
+    {
+        <div class="grid-auto">
+            @foreach (var project in projects)
+            {
+                <ProjectCard Project="project" />
+            }
+        </div>
+    }
+    else
+    {
+        <p class="muted">The first project is on its way.</p>
+    }
+</section>
+
+<NewsletterBand FormName="signup-home" Source="home" />
+
+@code {
+    IReadOnlyList<CommitItem> latestLessons = [];
+    IReadOnlyList<Project> projects = [];
+
+    protected override void OnInitialized()
+    {
+        latestLessons = ProjectCatalog.LatestLessons(4);
+        projects = ProjectCatalog.All.Take(3).ToList();
+    }
+}
