@@ -1,5 +1,16 @@
-﻿<h3>SiteFooter</h3>
-
-@code {
-    
-}
+﻿<footer class="site-footer">
+    <div class="bar">
+        <div class="stack" style="gap: var(--space-2)">
+            <a href="/" class="brand"><Logo />Enable Dev Mode</a>
+            <p class="small muted">Learn. Build. Ship.</p>
+        </div>
+        <nav aria-label="Footer">
+            <a href="/projects">Projects</a>
+            <a href="/about">About</a>
+            <a href="@SiteLinks.YouTube">YouTube</a>
+            <a href="@SiteLinks.GitHub">GitHub</a>
+            <a href="@SiteLinks.EmailHref">@SiteLinks.Email</a>
+        </nav>
+    </div>
+    <p class="legal caption">© @DateTime.Now.Year Enable Dev Mode</p>
+</footer>
