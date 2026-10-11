@@ -1,5 +1,6 @@
-﻿<h3>Badge</h3>
+﻿<span class="badge@(Kind == "neutral" ? "" : $" badge-{Kind}")">@ChildContent</span>
 
 @code {
-    
+    [Parameter] public string Kind { get; set; } = "neutral";   // neutral | accent | success | warning
+    [Parameter] public RenderFragment? ChildContent { get; set; }
 }

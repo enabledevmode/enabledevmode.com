@@ -1,5 +1,47 @@
-﻿<h3>SignupForm</h3>
+﻿@using System.ComponentModel.DataAnnotations
+@using EnableDevMode.Services
+@inject NewsletterClient Newsletter
+
+@if (subscribed)
+{
+    <p class="label" role="status">Check your inbox to confirm your subscription.</p>
+}
+else
+{
+    <EditForm Model="Signup" FormName="@FormName" OnValidSubmit="SubmitAsync" Enhance class="signup">
+        <DataAnnotationsValidator/>
+        <label for="@InputId" class="visually-hidden">Email address</label>
+        <InputText id="@InputId" @bind-Value="Signup.Email" type="email" class="input"
+                   placeholder="you@example.com" autocomplete="email"/>
+        <Button Type="ButtonType.Submit" Large="true">Subscribe</Button>
+        <ValidationMessage For="() => Signup.Email" class="field-error"/>
+    </EditForm>
+}
 
 @code {
-    
+
+    // Each placement needs its own name, e.g. "signup-home", "signup-project".
+    [Parameter, EditorRequired] public string FormName { get; set; } = "";
+    [Parameter] public string Source { get; set; } = "site";
+
+    [SupplyParameterFromForm] private SignupModel? Signup { get; set; }
+
+    bool subscribed;
+    string InputId => $"{FormName}-email";
+
+    protected override void OnInitialized() => Signup ??= new();
+
+    async Task SubmitAsync()
+    {
+        await Newsletter.SubscribeAsync(Signup!.Email, Source);
+        subscribed = true;
+    }
+
+    public sealed class SignupModel
+    {
+        [Required(ErrorMessage = "Enter your email address.")]
+        [EmailAddress(ErrorMessage = "Enter a valid email address.")]
+        public string Email { get; set; } = "";
+    }
+
 }

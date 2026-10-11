@@ -1,5 +1,17 @@
-﻿<h3>StatusBadge</h3>
+﻿@switch (Status)
+{
+    case ProjectStatus.Published:
+        <Badge Kind="BadgeKind.Success">Published</Badge>
+        break;
+    case ProjectStatus.Coming:
+        <Badge Kind="BadgeKind.Warning">Coming @ReleaseDate?.ToString("MMM d")</Badge>
+        break;
+    default:
+        <Badge>Planned</Badge>
+        break;
+}
 
 @code {
-    
+    [Parameter] public ProjectStatus Status { get; set; }
+    [Parameter] public DateOnly? ReleaseDate { get; set; }
 }

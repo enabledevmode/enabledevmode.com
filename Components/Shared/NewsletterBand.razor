@@ -1,5 +1,19 @@
-﻿<h3>NewsletterBand</h3>
+﻿<section id="newsletter" class="band">
+    <div class="section split" style="align-items: center; gap: var(--space-6) var(--space-8)">
+        <div class="main stack prose" style="gap: var(--space-3)">
+            <h2>The Blazor Roundup</h2>
+            <p class="lead">A short email every two weeks: the best Blazor articles and videos, library releases,
+                one practical tip, and new projects as they ship.</p>
+            <p class="small muted">Subscribers also hear first about the full course, with a founder price.</p>
+        </div>
+        <div class="side stack" style="gap: 10px">
+            <SignupForm FormName="@FormName" Source="@Source" />
+            <p class="caption">Every two weeks. Unsubscribe anytime.</p>
+        </div>
+    </div>
+</section>
 
 @code {
-    
+    [Parameter, EditorRequired] public string FormName { get; set; } = "";
+    [Parameter] public string Source { get; set; } = "site";
 }
