@@ -22,6 +22,7 @@
   --accent-hover: #1854B0;
   --accent-soft: #E8F0FC;
   --on-accent: #FFFFFF;
+  --logo-tile: #E0E2EB;   /* the logo's tile: a raised surface, light on light pages */
   --success: #17784A;
   --success-soft: #E5F4EC;
   --warning: #8A5300;
@@ -71,6 +72,7 @@
     --accent-hover: #93BEFF;
     --accent-soft: #16263D;
     --on-accent: #0D1117;
+    --logo-tile: #32353C;    
     --success: #5CC98F;
     --success-soft: #12291E;
     --warning: #F2B45C;
@@ -90,6 +92,7 @@
   --accent-hover: #93BEFF;
   --accent-soft: #16263D;
   --on-accent: #0D1117;
+  --logo-tile: #32353C;  
   --success: #5CC98F;
   --success-soft: #12291E;
   --warning: #F2B45C;

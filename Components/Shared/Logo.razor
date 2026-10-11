@@ -1,5 +1,11 @@
-﻿<h3>Logo</h3>
+﻿<svg viewBox="0 0 100 100" width="@Size" height="@Size" class="logo" aria-hidden="true" focusable="false">
+    <rect class="logo-tile" width="100" height="100" rx="28" />
+    <rect class="logo-track" x="14" y="28" width="72" height="44" rx="22" />
+    <circle class="logo-thumb" cx="64" cy="50" r="16.5" />
+    <polyline class="logo-check" points="57,50 62,55 71,45" fill="none"
+              stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
 
 @code {
-    
+    [Parameter] public int Size { get; set; } = 28;
 }

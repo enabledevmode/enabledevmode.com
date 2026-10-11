@@ -1,1 +1,4 @@
-﻿
+﻿.logo-tile  { fill: var(--logo-tile); }
+.logo-track { fill: var(--accent); }
+.logo-thumb { fill: #FFFFFF; }
+.logo-check { stroke: var(--accent); }
