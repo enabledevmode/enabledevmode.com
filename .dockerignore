@@ -1,0 +1,10 @@
+bin/
+obj/
+.git/
+.github/
+.idea/
+.vs/
+screenshots/
+*.user
+Dockerfile
+fly.toml

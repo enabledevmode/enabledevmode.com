@@ -20,10 +20,10 @@ cd enabledevmode.com
 dotnet watch
 ```
 
-The site runs without any setup. Newsletter signups need an API key for the email provider, which is kept out of source control:
+The site runs without any setup. Newsletter signups go to [Kit](https://kit.com) and need an API key, which is kept out of source control, and the form's id in `appsettings.json` (`Newsletter:FormId`):
 
 ```bash
-dotnet user-secrets set "Newsletter:ApiKey" "<key>"
+dotnet user-secrets set "Newsletter:ApiKey" "<Kit v4 API key>"
 ```
 
 ## Project layout
@@ -51,12 +51,23 @@ The home page, the Projects page, the project page at `/projects/<slug>`, and th
 
 The theme is one `IzzyTheme` tag in `Components/App.razor`: the Standard preset, the brand blue (`Brand="#005AB6"`), the page gray (`Gray="#F9F9FF"`, from which IzzyBlazor derives the light and dark gray ladders), pill-shaped controls (`Radius="ThemeRadius.Full"`), Sora and JetBrains Mono. `wwwroot/app.css` adds the brand's own dark-mode blues and the logo's colors. Layout and spacing come from component props (`Stack`, `Gap`, `Section`), not CSS.
 
+## Newsletter
+
+Signups use Kit's v4 API (`Services/NewsletterClient.cs`): each one creates the subscriber as inactive, then adds them to the Kit form, which has double opt-in turned on, so Kit sends the confirmation email. The page they signed up on is stored as the subscriber's referrer. Form posts are limited to 5 a minute per visitor.
+
 ## Deployment
 
-Any host that runs ASP.NET Core works. Set the newsletter key as an environment variable:
+The site runs on [Fly.io](https://fly.io) from the `Dockerfile`, with the settings in `fly.toml` (one always-on 512 MB machine). Every push to `main` deploys through `.github/workflows/fly-deploy.yml`.
 
-```
-Newsletter__ApiKey=<key>
+First time:
+
+```bash
+fly launch --no-deploy                       # use the existing fly.toml
+fly secrets set Newsletter__ApiKey=<key>     # the Kit API key
+fly deploy
+fly certs add enabledevmode.com              # then add the DNS records it prints
+fly certs add www.enabledevmode.com
+fly tokens create deploy                     # save as the FLY_API_TOKEN repository secret
 ```
 
 ## Contributing

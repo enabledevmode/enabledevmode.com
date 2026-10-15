@@ -1,4 +1,5 @@
 @inject NewsletterClient Newsletter
+@inject NavigationManager Nav
 
 @if (subscribed)
 {
@@ -35,7 +36,7 @@ else
     async Task SubmitAsync()
     {
         var ct = HttpContext?.RequestAborted ?? CancellationToken.None;
-        subscribed = await Newsletter.SubscribeAsync(Signup!.Email, Source, ct);
+        subscribed = await Newsletter.SubscribeAsync(Signup!.Email, Source, Nav.Uri, ct);
         failed = !subscribed;
     }
 
