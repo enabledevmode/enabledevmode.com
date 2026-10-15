@@ -1,47 +1,49 @@
-﻿@using System.ComponentModel.DataAnnotations
-@using EnableDevMode.Services
 @inject NewsletterClient Newsletter
 
 @if (subscribed)
 {
-    <p class="label" role="status">Check your inbox to confirm your subscription.</p>
+    <Alert Status="IzzyBlazor.Status.Success" Title="Almost done">Check your inbox to confirm your subscription.</Alert>
 }
 else
 {
-    <EditForm Model="Signup" FormName="@FormName" OnValidSubmit="SubmitAsync" Enhance class="signup">
-        <DataAnnotationsValidator/>
-        <label for="@InputId" class="visually-hidden">Email address</label>
-        <InputText id="@InputId" @bind-Value="Signup.Email" type="email" class="input"
-                   placeholder="you@example.com" autocomplete="email"/>
-        <Button Type="ButtonType.Submit" Large="true">Subscribe</Button>
-        <ValidationMessage For="() => Signup.Email" class="field-error"/>
-    </EditForm>
+    <Form Model="Signup" FormName="@FormName" OnValidSubmit="SubmitAsync">
+        <Row Gap="2" Wrap Align="Align.Start">
+            <Box Grow Basis="Length.Rem(14)">
+                <TextField @bind-Value="Signup!.Email" HideLabel Placeholder="you@example.com" AutoComplete="email" Size="ControlSize.Lg" />
+            </Box>
+            <Button Type="ButtonType.Submit" Size="ControlSize.Lg">Subscribe</Button>
+        </Row>
+        @if (failed)
+        {
+            <Alert Status="IzzyBlazor.Status.Danger">Something went wrong on our end. Please try again in a minute.</Alert>
+        }
+    </Form>
 }
 
 @code {
-
-    // Each placement needs its own name, e.g. "signup-home", "signup-project".
     [Parameter, EditorRequired] public string FormName { get; set; } = "";
     [Parameter] public string Source { get; set; } = "site";
 
     [SupplyParameterFromForm] private SignupModel? Signup { get; set; }
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
 
     bool subscribed;
-    string InputId => $"{FormName}-email";
+    bool failed;
 
     protected override void OnInitialized() => Signup ??= new();
 
     async Task SubmitAsync()
     {
-        await Newsletter.SubscribeAsync(Signup!.Email, Source);
-        subscribed = true;
+        var ct = HttpContext?.RequestAborted ?? CancellationToken.None;
+        subscribed = await Newsletter.SubscribeAsync(Signup!.Email, Source, ct);
+        failed = !subscribed;
     }
 
     public sealed class SignupModel
     {
         [Required(ErrorMessage = "Enter your email address.")]
         [EmailAddress(ErrorMessage = "Enter a valid email address.")]
+        [Display(Name = "Email address")]
         public string Email { get; set; } = "";
     }
-
 }

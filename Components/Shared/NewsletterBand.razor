@@ -1,17 +1,17 @@
-﻿<section id="newsletter" class="band">
-    <div class="section split" style="align-items: center; gap: var(--space-6) var(--space-8)">
-        <div class="main stack prose" style="gap: var(--space-3)">
-            <h2>The Blazor Roundup</h2>
-            <p class="lead">A short email every two weeks: the best Blazor articles and videos, library releases,
-                one practical tip, and new projects as they ship.</p>
-            <p class="small muted">Subscribers also hear first about the full course, with a founder price.</p>
-        </div>
-        <div class="side stack" style="gap: 10px">
+<Section id="newsletter" Bg="Color.SurfaceContainerLow" Spacing="SectionSpacing.Lg">
+    <Stack Direction="new() { Base = Direction.Column, Lg = Direction.Row }" Gap="new() { Base = 6, Lg = 16 }" Align="new() { Lg = Align.Center }">
+        <Column Gap="3" Grow MaxWidth="Length.Prose">
+            <Heading Level="2" Size="TextSize.Xl3">The Blazor Roundup</Heading>
+            <TextBlock Size="TextSize.Lg" Color="Color.Muted">A short email every two weeks: the best Blazor articles and videos, library
+                releases, one practical tip, and new projects as they ship.</TextBlock>
+            <TextBlock Size="TextSize.Sm" Color="Color.Subtle">Subscribers also hear first about the full course, with a founder price.</TextBlock>
+        </Column>
+        <Column Gap="2" Basis="Length.Rem(26)" Shrink="false">
             <SignupForm FormName="@FormName" Source="@Source" />
-            <p class="caption">Every two weeks. Unsubscribe anytime.</p>
-        </div>
-    </div>
-</section>
+            <TextBlock Size="TextSize.Xs" Color="Color.Subtle">Every two weeks. Unsubscribe anytime.</TextBlock>
+        </Column>
+    </Stack>
+</Section>
 
 @code {
     [Parameter, EditorRequired] public string FormName { get; set; } = "";

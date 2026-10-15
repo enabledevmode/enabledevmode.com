@@ -1,13 +1,13 @@
-﻿@switch (Status)
+@switch (Status)
 {
     case ProjectStatus.Published:
-        <Badge Kind="BadgeKind.Success">Published</Badge>
+        <Badge Status="IzzyBlazor.Status.Success" Dot>Published</Badge>
         break;
     case ProjectStatus.Coming:
-        <Badge Kind="BadgeKind.Warning">Coming @ReleaseDate?.ToString("MMM d")</Badge>
+        <Badge Status="IzzyBlazor.Status.Warning" Dot>Coming @ReleaseDate?.ToString("MMM d")</Badge>
         break;
     default:
-        <Badge>Planned</Badge>
+        <Badge Dot>Planned</Badge>
         break;
 }
 

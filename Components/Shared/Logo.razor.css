@@ -1,4 +1,4 @@
-﻿.logo-tile  { fill: var(--logo-tile); }
-.logo-track { fill: var(--accent); }
-.logo-thumb { fill: #FFFFFF; }
-.logo-check { stroke: var(--accent); }
+.logo { flex: none; }
+.logo-tile   { fill: var(--edm-logo-tile); }
+.logo-letter { fill: var(--edm-logo-letter); }
+.logo-cursor { fill: var(--ib-color-primary); }

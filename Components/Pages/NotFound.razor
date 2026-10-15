@@ -1,5 +1,13 @@
-﻿@page "/not-found"
-@layout MainLayout
+@page "/not-found"
 
-<h3>Not Found</h3>
-<p>Sorry, the content you are looking for does not exist.</p>
+<PageTitle>Page not found | Enable Dev Mode</PageTitle>
+
+<Section Spacing="SectionSpacing.Lg" PaddingY="new() { Base = 16, Md = 16 }">
+    <EmptyState Icon="Lucide.MapPinOff" Title="Page not found" TitleLevel="1" Size="ControlSize.Lg"
+                Description="That page doesn't exist, or it moved. Try the projects list, or head back home.">
+        <Actions>
+            <LinkButton Href="/projects">Browse projects</LinkButton>
+            <LinkButton Href="/" Variant="ButtonVariant.Outline" Accent="Accent.Neutral">Home</LinkButton>
+        </Actions>
+    </EmptyState>
+</Section>

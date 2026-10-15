@@ -1,29 +1,31 @@
-using EnableDevMode;
 using EnableDevMode.Components;
+using EnableDevMode.Data;
 using EnableDevMode.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRazorComponents();
+builder.Services.AddIzzyBlazor();
 builder.Services.AddHttpClient<NewsletterClient>();
+builder.Services.AddOutputCache();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler("/Error", createScopeForErrors: true);
     app.UseHsts();
 }
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 app.UseHttpsRedirection();
 
 app.UseAntiforgery();
+app.UseOutputCache();   // only the sitemap opts in; pages carry a form, so they aren't cached
 
 app.MapStaticAssets();
-//app.MapGet("/sitemap.xml", ...).CacheOutput(p => p.Expire(TimeSpan.FromHours(1)));
+app.MapGet("/sitemap.xml", (HttpContext http) => Sitemap.Build(http, ProjectCatalog.All))
+   .CacheOutput(p => p.Expire(TimeSpan.FromHours(1)));
 app.MapRazorComponents<App>();
+app.MapIzzyBlazor();
 
 app.Run();

@@ -1,7 +1,8 @@
-﻿namespace EnableDevMode.Data;
+namespace EnableDevMode.Data;
 
 /// <summary>
-/// External links used across the site (header, footer, etc...)
+/// External links used across the site (header, footer, About page, project pages).
+/// Change them here and every page picks up the new value.
 /// </summary>
 public static class SiteLinks
 {

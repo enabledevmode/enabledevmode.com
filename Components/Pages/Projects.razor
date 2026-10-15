@@ -1,6 +1,52 @@
-﻿@page "/projects"
-<h3>Projects</h3>
+@page "/projects"
 
-@code {
-    
-}
+<PageTitle>Projects | Enable Dev Mode</PageTitle>
+
+<Section Spacing="SectionSpacing.Lg">
+    <Column Gap="10">
+        <Column Gap="3" MaxWidth="Length.Prose">
+            <Heading Level="1" Size="TextSize.Xl4" MinSize="TextSize.Xl3">Projects</Heading>
+            <TextBlock Size="TextSize.Lg" Color="Color.Muted">Complete apps built with Blazor and .NET. Each one has a video, a project page with
+                every lesson, and the full source on GitHub.</TextBlock>
+        </Column>
+
+        @if (ProjectCatalog.All.Count > 0)
+        {
+            <Column Gap="0">
+                <Divider />
+                @foreach (var project in ProjectCatalog.All)
+                {
+                    <Grid Template="@(new() { Base = "minmax(0, 1fr)", Md = "18rem minmax(0, 1fr)" })" Gap="6" PaddingY="8">
+                        <Anchor Href="@($"/projects/{project.Slug}")" Underline="AnchorUnderline.None" aria-hidden="true" tabindex="-1">
+                            <Image Src="@project.Cover" Alt="" Ratio="16 / 9.0" Radius="Radius.Md" />
+                        </Anchor>
+                        <Column Gap="3">
+                            <Row Gap="2" Align="Align.Center">
+                                <StatusBadge Status="project.Status" ReleaseDate="project.ReleaseDate" />
+                                @if (project.Lessons.Count > 0)
+                                {
+                                    <TextBlock As="span" Size="TextSize.Xs" Color="Color.Muted">@project.Lessons.Count lessons · .NET @project.DotNetVersion</TextBlock>
+                                }
+                            </Row>
+                            <Heading Level="2" Size="TextSize.Xl">
+                                <Anchor Href="@($"/projects/{project.Slug}")" Inherit Underline="AnchorUnderline.Hover">@project.Title</Anchor>
+                            </Heading>
+                            <TextBlock Color="Color.Muted" MaxWidth="Length.Prose">@project.Summary</TextBlock>
+                            <Row Gap="2">
+                                <LinkButton Href="@($"/projects/{project.Slug}")" Variant="ButtonVariant.Soft" Size="ControlSize.Sm">View project</LinkButton>
+                                <LinkButton Href="@project.RepoUrl" External Variant="ButtonVariant.Ghost" Accent="Accent.Neutral" Size="ControlSize.Sm" StartIcon="Brands.GitHub">Code</LinkButton>
+                            </Row>
+                        </Column>
+                    </Grid>
+                    <Divider />
+                }
+            </Column>
+        }
+        else
+        {
+            <EmptyState Icon="Lucide.Hammer" Title="The first project is on its way" Description="Subscribe below to hear when it's out." Bordered />
+        }
+    </Column>
+</Section>
+
+<NewsletterBand FormName="signup-projects" Source="projects" />

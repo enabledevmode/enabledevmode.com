@@ -1,59 +1,62 @@
-﻿@page "/"
-@using EnableDevMode.Components.Shared
+@page "/"
 
 <PageTitle>Enable Dev Mode</PageTitle>
 
-<section class="section split" style="align-items: center; padding-block: 80px 72px">
-    <div class="main stack" style="gap: var(--space-5)">
-        <p class="mono muted">dotnet new blazor --name YourNextApp</p>
-        <h1 class="display" style="max-width: 640px">Build real apps with Blazor and .NET.</h1>
-        <p class="lead" style="max-width: 540px">Complete project builds, from the first commit to deployment.
-            Watch the video, follow the lessons, and grab the code on GitHub.</p>
-        <div class="row">
-            <Button Href="/projects">Browse projects</Button>
-            <Button Href="@SiteLinks.YouTube" Kind="secondary" Icon="youtube" Target="_blank">Watch on YouTube</Button>
-        </div>
-    </div>
-    <div class="side panel" style="padding-bottom: var(--space-1)">
-        <div class="row" style="justify-content: space-between; margin-bottom: 20px">
-            <h2 class="label">Latest lessons</h2>
-            <span class="mono caption">main</span>
-        </div>
-        @if (latestLessons.Count > 0)
+<Section Spacing="SectionSpacing.Lg">
+    <Stack Direction="new() { Base = Direction.Column, Lg = Direction.Row }" Gap="new() { Base = 10, Lg = 16 }" Align="new() { Lg = Align.Center }">
+        <Column Gap="6" Grow>
+            <TextBlock Family="FontFamily.Mono" Size="TextSize.Sm" Color="Color.Muted">dotnet new blazor --name YourNextApp</TextBlock>
+            <Heading Level="1" Size="TextSize.Xl5" MinSize="TextSize.Xl3" Wrap="TextWrap.Balance">Build real apps with Blazor and .NET.</Heading>
+            <TextBlock Size="TextSize.Lg" Color="Color.Muted" MaxWidth="Length.Rem(34)">
+                Complete project builds, from the first commit to deployment. Watch the video, follow the lessons, and grab the code on GitHub.
+            </TextBlock>
+            <Row Gap="3" Wrap>
+                <LinkButton Href="/projects" Size="ControlSize.Lg">Browse projects</LinkButton>
+                <LinkButton Href="@SiteLinks.YouTube" External Size="ControlSize.Lg" Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.YouTube">Watch on YouTube</LinkButton>
+            </Row>
+        </Column>
+        <Box Basis="Length.Rem(22)" Shrink="false">
+            <Card Title="Latest lessons" TitleLevel="2" Size="ControlSize.Sm">
+                <Actions><Code>main</Code></Actions>
+                <ChildContent>
+                    @if (latestLessons.Count > 0)
+                    {
+                        <LessonLog Items="latestLessons" />
+                    }
+                    else
+                    {
+                        <TextBlock Size="TextSize.Sm" Color="Color.Muted">The first lessons are being recorded. <Anchor Href="/#newsletter">Subscribe</Anchor> to hear when they're out.</TextBlock>
+                    }
+                </ChildContent>
+            </Card>
+        </Box>
+    </Stack>
+</Section>
+
+<Section Spacing="SectionSpacing.Md" PaddingTop="0">
+    <Column Gap="6">
+        <Row Justify="Justify.Between" Align="Align.Baseline">
+            <Heading Level="2" Size="TextSize.Xl3">Projects</Heading>
+            @if (projects.Count > 0)
+            {
+                <Anchor Href="/projects" Underline="AnchorUnderline.Hover">See all projects</Anchor>
+            }
+        </Row>
+        @if (projects.Count > 0)
         {
-            <CommitLog Items="latestLessons" />
+            <Grid MinChildWidth="Length.Rem(18)" Gap="6">
+                @foreach (var project in projects)
+                {
+                    <ProjectCard Project="project" />
+                }
+            </Grid>
         }
         else
         {
-            <p class="small muted" style="padding-bottom: 20px">
-                The first lessons are being recorded. <a href="/#newsletter">Subscribe</a> to hear when they're out.
-            </p>
+            <EmptyState Icon="Lucide.Hammer" Title="The first project is on its way" Description="Subscribe below to hear when it's out." Bordered />
         }
-    </div>
-</section>
-
-<section class="section stack" style="padding-top: 0; gap: var(--space-6)">
-    <div class="row" style="justify-content: space-between; align-items: baseline">
-        <h2>Projects</h2>
-        @if (projects.Count > 0)
-        {
-            <a href="/projects" class="label" style="color: var(--accent)">See all projects</a>
-        }
-    </div>
-    @if (projects.Count > 0)
-    {
-        <div class="grid-auto">
-            @foreach (var project in projects)
-            {
-                <ProjectCard Project="project" />
-            }
-        </div>
-    }
-    else
-    {
-        <p class="muted">The first project is on its way.</p>
-    }
-</section>
+    </Column>
+</Section>
 
 <NewsletterBand FormName="signup-home" Source="home" />
 

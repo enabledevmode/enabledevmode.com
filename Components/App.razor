@@ -1,20 +1,22 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Enable Dev Mode</title>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <base href="/"/>
-    <ResourcePreloader/>
-    <link rel="stylesheet" href="@Assets["app.css"]"/>
-    <link rel="stylesheet" href="@Assets["site.css"]"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <ResourcePreloader />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Sora:wght@400;600;700&display=swap">
-    <link rel="stylesheet" href="@Assets["EnableDevMode.styles.css"]"/>
-    <ImportMap/>
-    <HeadOutlet/>
+    <link rel="stylesheet" href="@Assets["_content/IzzyBlazor.Core/izzyblazor.css"]" />
+    <link rel="stylesheet" href="@Assets["app.css"]" />
+    <link rel="stylesheet" href="@Assets["EnableDevMode.styles.css"]" />
+    <IzzyTheme Preset="ThemePreset.Standard" Brand="#005AB6" Gray="#F9F9FF" Radius="ThemeRadius.Full"
+               BodyFont="Sora, system-ui, sans-serif" MonoFont="'JetBrains Mono', ui-monospace, monospace"
+               HeadingWeight="700" />
+    <ImportMap />
+    <HeadOutlet />
 </head>
 
 <body>

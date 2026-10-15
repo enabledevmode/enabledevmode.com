@@ -1,6 +1,164 @@
-﻿@page "/projects/{Slug}"
-<h3>ProjectPage</h3>
+@page "/projects/{Slug}"
+@inject NavigationManager Nav
+
+@if (project is not null)
+{
+    <PageTitle>@project.Title | Enable Dev Mode</PageTitle>
+
+    <Section Spacing="SectionSpacing.Md">
+        <Column Gap="5">
+            <Breadcrumb>
+                <BreadcrumbItem Href="/projects">Projects</BreadcrumbItem>
+                <BreadcrumbItem>@project.Title</BreadcrumbItem>
+            </Breadcrumb>
+            <Column Gap="3">
+                <Row Gap="2" Align="Align.Center">
+                    <StatusBadge Status="project.Status" ReleaseDate="project.ReleaseDate" />
+                    <Badge Variant="BadgeVariant.Outline">.NET @project.DotNetVersion</Badge>
+                </Row>
+                <Heading Level="1" Size="TextSize.Xl4" MinSize="TextSize.Xl3" Wrap="TextWrap.Balance">@project.Title</Heading>
+                <TextBlock Size="TextSize.Lg" Color="Color.Muted" MaxWidth="Length.Prose">@project.Summary</TextBlock>
+            </Column>
+            <Row Gap="2" Wrap>
+                @if (project.VideoId is not null)
+                {
+                    <LinkButton Href="@project.VideoUrl" External StartIcon="Lucide.Play">Watch on YouTube</LinkButton>
+                }
+                <LinkButton Href="@project.RepoUrl" External Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.GitHub">Code on GitHub</LinkButton>
+                @if (project.DemoUrl is not null)
+                {
+                    <LinkButton Href="@project.DemoUrl" External Variant="ButtonVariant.Ghost" EndIcon="Lucide.ExternalLink">Live demo</LinkButton>
+                }
+            </Row>
+        </Column>
+    </Section>
+
+    <Section Spacing="SectionSpacing.None">
+        <VideoEmbed YouTubeId="@project.VideoId" Label="@project.Title" Radius="Radius.Lg" EmptyText="@VideoTitle" />
+    </Section>
+
+    <Section Spacing="SectionSpacing.Lg">
+        <Grid Template="@(new() { Base = "minmax(0, 1fr)", Lg = "minmax(0, 1fr) 20rem" })" Gap="new() { Base = 10, Lg = 16 }" Align="Align.Start">
+            <Column Gap="14">
+                <Column Gap="4">
+                    <Heading Level="2" Size="TextSize.Xl2">What you'll build</Heading>
+                    <TextBlock MaxWidth="Length.Prose">@project.Description</TextBlock>
+                    @if (project.Gallery.Count > 0)
+                    {
+                        <Grid MinChildWidth="Length.Rem(11)" Gap="3">
+                            @foreach (var image in project.Gallery)
+                            {
+                                <Anchor Href="@image" Underline="AnchorUnderline.None"><Image Src="@image" Alt="" Ratio="16 / 9.0" Radius="Radius.Md" /></Anchor>
+                            }
+                        </Grid>
+                    }
+                </Column>
+
+                @if (project.Lessons.Count > 0)
+                {
+                    <Column Gap="5" id="lessons">
+                        <Row Justify="Justify.Between" Align="Align.Baseline" Wrap Gap="2">
+                            <Heading Level="2" Size="TextSize.Xl2">Lessons</Heading>
+                            <TextBlock As="span" Size="TextSize.Sm" Color="Color.Muted">@project.Lessons.Count lessons · @FormatDuration(project.TotalDuration)</TextBlock>
+                        </Row>
+                        <LessonLog Items="CommitItem.FromLessons(project)" Detailed />
+                    </Column>
+                }
+
+                @if (project.Tips.Count > 0)
+                {
+                    <Column Gap="4">
+                        <Heading Level="2" Size="TextSize.Xl2">Tips and gotchas</Heading>
+                        @foreach (var tip in project.Tips)
+                        {
+                            <Alert Status="IzzyBlazor.Status.Info" Title="@tip.Title">@tip.Body</Alert>
+                            @if (tip.Code is not null)
+                            {
+                                <Code Block Language="razor">@tip.Code</Code>
+                            }
+                        }
+                    </Column>
+                }
+            </Column>
+
+            <Card Variant="CardVariant.Filled" Size="ControlSize.Sm">
+                <Column Gap="6">
+                    @if (project.Learn.Count > 0)
+                    {
+                        <Column Gap="3">
+                            <Heading Level="2" Size="TextSize.Sm">You'll learn</Heading>
+                            <List Icon="Lucide.Check" IconColor="Color.PrimaryText" Gap="2">
+                                @foreach (var item in project.Learn)
+                                {
+                                    <ListItem><TextBlock As="span" Size="TextSize.Sm">@item</TextBlock></ListItem>
+                                }
+                            </List>
+                        </Column>
+                    }
+                    @if (project.Prerequisites.Count > 0)
+                    {
+                        <Column Gap="3">
+                            <Heading Level="2" Size="TextSize.Sm">Before you start</Heading>
+                            <List Icon="Lucide.Wrench" IconColor="Color.Muted" Gap="2">
+                                @foreach (var item in project.Prerequisites)
+                                {
+                                    <ListItem><TextBlock As="span" Size="TextSize.Sm">@item</TextBlock></ListItem>
+                                }
+                            </List>
+                        </Column>
+                    }
+                    @if (project.Resources.Count > 0)
+                    {
+                        <Column Gap="3">
+                            <Heading Level="2" Size="TextSize.Sm">Resources</Heading>
+                            <List Plain Gap="2">
+                                @foreach (var resource in project.Resources)
+                                {
+                                    <ListItem><Anchor Href="@resource.Url" External>@resource.Title</Anchor></ListItem>
+                                }
+                            </List>
+                        </Column>
+                    }
+                </Column>
+            </Card>
+        </Grid>
+    </Section>
+
+    <Section Spacing="SectionSpacing.Sm" PaddingBottom="12">
+        <Row Justify="Justify.Between" Align="Align.Center" Wrap Gap="4">
+            <LinkButton Href="/projects" Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Lucide.ArrowLeft">All projects</LinkButton>
+            @if (next is not null)
+            {
+                <Column Gap="1" Align="Align.End">
+                    <TextBlock Size="TextSize.Xs" Color="Color.Muted">Next project</TextBlock>
+                    <Anchor Href="@($"/projects/{next.Slug}")" Underline="AnchorUnderline.Hover">@next.Title</Anchor>
+                </Column>
+            }
+        </Row>
+    </Section>
+
+    <NewsletterBand FormName="signup-project" Source="@($"project:{project.Slug}")" />
+}
 
 @code {
-    
+    [Parameter] public string Slug { get; set; } = "";
+
+    Project? project;
+    Project? next;
+
+    string VideoTitle => project?.ReleaseDate is { } date ? $"Video coming {date:MMMM d}" : "Video coming soon";
+
+    protected override void OnParametersSet()
+    {
+        project = ProjectCatalog.Find(Slug);
+        if (project is null)
+        {
+            Nav.NotFound();
+            return;
+        }
+        next = ProjectCatalog.Next(project);
+    }
+
+    static string FormatDuration(TimeSpan d) =>
+        d.TotalHours >= 1 ? $"{(int)d.TotalHours} hr {d.Minutes} min" : $"{d.Minutes} min";
 }

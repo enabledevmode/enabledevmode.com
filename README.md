@@ -7,7 +7,7 @@ The site lists the channel's projects. Each project page summarizes what you'll 
 ## Stack
 
 - Blazor Web App on .NET 10, rendered with static server-side rendering (no WebAssembly, no SignalR connection)
-- A handful of plain Razor components and one stylesheet, `wwwroot/site.css`. No component library.
+- [IzzyBlazor](https://github.com/enabledevmode/izzyblazor) for every component, layout and theme. The site doubles as a working example of the library.
 - Fonts: Sora and JetBrains Mono
 
 ## Run it locally
@@ -30,12 +30,12 @@ dotnet user-secrets set "Newsletter:ApiKey" "<key>"
 
 ```
 Components/
-  Layout/     MainLayout, SiteHeader, SiteFooter
+  Layout/     MainLayout (IzzyBlazor's AppShell: header, main, footer)
   Pages/      Home, Projects, ProjectPage, About, NotFound
-  Shared/     Button, Badge, CommitLog, ProjectCard, SignupForm, ...
+  Shared/     Wordmark, Brand, Logo, ProjectCard, LessonLog, StatusBadge, SignupForm, NewsletterBand
 Data/         Project records, ProjectCatalog, SiteLinks
-Services/     NewsletterClient (calls the email provider)
-wwwroot/      site.css, images
+Services/     NewsletterClient (calls the email provider), Sitemap
+wwwroot/      app.css (one override), images
 ```
 
 ## Adding a project
@@ -49,7 +49,7 @@ The home page, the Projects page, the project page at `/projects/<slug>`, and th
 
 ## Design system
 
-Colors, type, spacing, and radius are CSS custom properties at the top of `wwwroot/site.css`, with light and dark values. Components use those tokens and the classes in the same file; avoid hard-coded colors or spacing.
+The theme is one `IzzyTheme` tag in `Components/App.razor`: the Standard preset, the brand blue (`Brand="#005AB6"`), the page gray (`Gray="#F9F9FF"`, from which IzzyBlazor derives the light and dark gray ladders), pill-shaped controls (`Radius="ThemeRadius.Full"`), Sora and JetBrains Mono. `wwwroot/app.css` adds the brand's own dark-mode blues and the logo's colors. Layout and spacing come from component props (`Stack`, `Gap`, `Section`), not CSS.
 
 ## Deployment
 

@@ -1,7 +1,53 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 
-<SiteHeader />
-<main>
-    @Body
-</main>
-<SiteFooter />
+<AppShell ContentWidth="Length.Rem(70)" Variant="ShellVariant.Flat">
+    <AppHeader Bg="Color.Background">
+        <AppBrand Label="Enable Dev Mode" Href="/" HideLabel>
+            <Logo><Wordmark /></Logo>
+        </AppBrand>
+        <Box Grow />
+        <HeaderNav Label="Site">
+            <ChildContent>
+                <NavItem Href="/projects">Projects</NavItem>
+                <NavItem Href="/about">About</NavItem>
+            </ChildContent>
+            <PanelHeader><Brand /></PanelHeader>
+            <PanelFooter>
+                <Column Gap="3">
+                    <Row Gap="2">
+                        <LinkButton Href="@SiteLinks.YouTube" Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.YouTube">YouTube</LinkButton>
+                        <LinkButton Href="@SiteLinks.GitHub" Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.GitHub">GitHub</LinkButton>
+                    </Row>
+                    <LinkButton Href="/#newsletter" FullWidth>Subscribe to the newsletter</LinkButton>
+                </Column>
+            </PanelFooter>
+        </HeaderNav>
+        <Row Gap="1" Align="Align.Center">
+            <IconButton VisibleFrom="Breakpoint.Md" Icon="Brands.YouTube" Label="YouTube" Href="@SiteLinks.YouTube" Variant="ButtonVariant.Ghost" Accent="Accent.Neutral" />
+            <IconButton VisibleFrom="Breakpoint.Md" Icon="Brands.GitHub" Label="GitHub" Href="@SiteLinks.GitHub" Variant="ButtonVariant.Ghost" Accent="Accent.Neutral" />
+            <ColorSchemeSwitch />
+        </Row>
+        <LinkButton Href="/#newsletter" VisibleFrom="Breakpoint.Sm">Subscribe</LinkButton>
+    </AppHeader>
+
+    <AppMain Bg="Color.Background">@Body</AppMain>
+
+    <AppFooter Bg="Color.Background">
+        <Stack Direction="new() { Base = Direction.Column, Md = Direction.Row }" Justify="Justify.Between" Gap="6" PaddingY="10">
+            <Column Gap="2">
+                <Brand />
+                <TextBlock Size="TextSize.Sm" Color="Color.Muted">Learn. Build. Ship.</TextBlock>
+                <TextBlock Size="TextSize.Xs" Color="Color.Subtle">© @DateTime.Now.Year Enable Dev Mode</TextBlock>
+            </Column>
+            <Row Gap="6" Wrap Align="Align.Start">
+                <Anchor Href="/projects" Inherit Underline="AnchorUnderline.Hover">Projects</Anchor>
+                <Anchor Href="/about" Inherit Underline="AnchorUnderline.Hover">About</Anchor>
+                <Anchor Href="@SiteLinks.YouTube" Inherit Underline="AnchorUnderline.Hover">YouTube</Anchor>
+                <Anchor Href="@SiteLinks.GitHub" Inherit Underline="AnchorUnderline.Hover">GitHub</Anchor>
+                <Anchor Href="@SiteLinks.EmailHref" Inherit Underline="AnchorUnderline.Hover">@SiteLinks.Email</Anchor>
+            </Row>
+        </Stack>
+    </AppFooter>
+</AppShell>
+
+<ToastRegion />
