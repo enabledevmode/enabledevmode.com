@@ -15,11 +15,11 @@
                     }
                     @if (item.WatchUrl is not null)
                     {
-                        <LinkButton Href="@item.WatchUrl" External HideExternalIcon Variant="ButtonVariant.Link" Size="ControlSize.Sm" StartIcon="Lucide.Play">Watch from @item.WatchLabel</LinkButton>
+                        <LinkButton Href="@item.WatchUrl" External HideExternalIcon Variant="ButtonVariant.Link" Size="ControlSize.Sm" StartIcon="Tabler.PlayerPlay">Watch from @item.WatchLabel</LinkButton>
                     }
                     @if (Detailed && item.CommitUrl is not null)
                     {
-                        <LinkButton Href="@item.CommitUrl" External HideExternalIcon Variant="ButtonVariant.Link" Size="ControlSize.Sm" StartIcon="Lucide.Code">Code at this step</LinkButton>
+                        <LinkButton Href="@item.CommitUrl" External HideExternalIcon Variant="ButtonVariant.Link" Size="ControlSize.Sm" StartIcon="Tabler.Code">Code at this step</LinkButton>
                     }
                 </Row>
             </Column>

@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IzzyBlazor" Version="0.1.0-alpha.2" />
+    <PackageReference Include="IzzyBlazor" Version="0.1.0-alpha.3" />
     <PackageReference Include="Markdig" Version="1.4.0" />
   </ItemGroup>
 
