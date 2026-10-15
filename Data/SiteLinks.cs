@@ -8,6 +8,7 @@ public static class SiteLinks
 {
     public const string YouTube = "https://www.youtube.com/@enabledevmode";
     public const string GitHub = "https://github.com/enabledevmode";
+    public const string IzzyBlazor = "https://github.com/enabledevmode/izzyblazor";
     public const string Email = "israel@enabledevmode.com";
 
     /// <summary>The email address as a mailto: link.</summary>

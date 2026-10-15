@@ -1,0 +1,24 @@
+@* One Roundup issue as a card linking to its page: number and date, subject, preview text. *@
+<Card Title="@Issue.Subject" TitleLevel="@TitleLevel" Href="@Issue.Url" Size="@(Featured ? ControlSize.Lg : ControlSize.Md)">
+    <Header>
+        <Row Gap="2" Align="Align.Center">
+            @if (Featured)
+            {
+                <Badge Accent="Accent.Primary" Variant="BadgeVariant.Solid">Latest</Badge>
+            }
+            <TextBlock As="span" Family="FontFamily.Mono" Size="TextSize.Sm" Color="Color.Muted">#@Issue.Number · @IssueDates.Short(Issue.Sent)</TextBlock>
+        </Row>
+    </Header>
+    <ChildContent>
+        <TextBlock Size="@(Featured ? TextSize.Md : TextSize.Sm)" Color="Color.Muted">@Issue.Preview</TextBlock>
+    </ChildContent>
+</Card>
+
+@code {
+    [Parameter, EditorRequired] public RoundupIssue Issue { get; set; } = default!;
+
+    /// <summary>The larger card for the newest issue, with a "Latest" badge.</summary>
+    [Parameter] public bool Featured { get; set; }
+
+    [Parameter] public int TitleLevel { get; set; } = 3;
+}

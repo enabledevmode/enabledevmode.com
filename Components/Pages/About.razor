@@ -16,19 +16,29 @@
             <Column Gap="4">
                 <TextBlock>I'm a software developer who works mostly in Angular, with Python and C# along the way, and I've
                     built software for accounting and warehousing teams.</TextBlock>
-                <TextBlock>Enable Dev Mode is about building practical skills you can actually use, whether that's landing a
-                    better job, leveling up at the one you have, or building and selling apps of your own. I teach what
-                    has paid off for me, through projects you can finish and use.</TextBlock>
+                <TextBlock>Right now I'm building with Blazor and .NET. The main piece is <Anchor Href="@SiteLinks.IzzyBlazor" External>IzzyBlazor</Anchor>,
+                    a component library for Blazor's static server rendering. This site runs on it, so every rough edge I hit here
+                    goes back into the library.</TextBlock>
+                <TextBlock>Every other Thursday I send <Anchor Href="/roundup">The Blazor Roundup</Anchor>: what shipped in Blazor and
+                    .NET, and what to do about it. It's the reading I'd be doing anyway, sorted and checked.</TextBlock>
+                <TextBlock>Tutorials and project videos will come, but not on a schedule. They'll grow out of what I'm building, once
+                    there's something worth teaching.</TextBlock>
             </Column>
         </Column>
 
         <Column Gap="5">
             <Heading Level="2" Size="TextSize.Xl2">What you'll find here</Heading>
             <DescriptionList Orientation="Orientation.Vertical" Divided>
-                <DescriptionItem Term="Project builds">Complete apps you can follow from the first commit to deployment.</DescriptionItem>
-                <DescriptionItem Term="Short explainers">New framework features and when to use them.</DescriptionItem>
-                <DescriptionItem Term="IzzyBlazor">The component library this site is built with, taught in the open.</DescriptionItem>
-                <DescriptionItem Term="The Blazor Roundup">A newsletter every two weeks with the best Blazor links and a practical tip.</DescriptionItem>
+                <DescriptionItem Term="The Blazor Roundup">Releases, security patches, component libraries and the best articles, every other Thursday.</DescriptionItem>
+                <DescriptionItem Term="IzzyBlazor">The component library this site is built with, in alpha. Each Roundup notes what changed.</DescriptionItem>
+                @if (ProjectCatalog.HasPublished)
+                {
+                    <DescriptionItem Term="Projects">Apps I've built, with the video, the lessons and the code.</DescriptionItem>
+                }
+                else
+                {
+                    <DescriptionItem Term="Videos">Later, as the projects take shape. The Roundup will say when the first one is out.</DescriptionItem>
+                }
             </DescriptionList>
         </Column>
 

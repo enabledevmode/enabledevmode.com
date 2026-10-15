@@ -1,0 +1,9 @@
+@* A small uppercase label above a heading, in the brand's warm highlight. Use at most one per view. *@
+<TextBlock Size="TextSize.Xs" Weight="FontWeight.Bold" Transform="TextTransform.Uppercase" LetterSpacing="LetterSpacing.Wider"
+           Color="Tertiary">@ChildContent</TextBlock>
+
+@code {
+    static readonly Color Tertiary = Color.Token("tertiary");
+
+    [Parameter, EditorRequired] public RenderFragment ChildContent { get; set; } = default!;
+}

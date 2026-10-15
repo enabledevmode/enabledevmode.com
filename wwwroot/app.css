@@ -7,6 +7,10 @@
   --ib-color-on-primary:   light-dark(#FFFFFF, #002F65);
   --ib-color-primary-text: light-dark(#005AB6, #ABC7FF);
 
+  /* The brand's warm highlight, for small uppercase labels: at most one per view
+     (Color.Token("tertiary")). */
+  --ib-color-tertiary: light-dark(#934700, #FFB688);
+
   /* The logo's tile and letter (surface-container-highest and on-surface in the brand tokens). */
   --edm-logo-tile:   light-dark(#E0E2EB, #32353C);
   --edm-logo-letter: light-dark(#191C22, #E0E2EB);

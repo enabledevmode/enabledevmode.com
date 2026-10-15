@@ -1,0 +1,80 @@
+@page "/roundup/{Number:int}"
+@inject RoundupArchive Roundup
+@inject NavigationManager Nav
+
+@if (issue is not null)
+{
+    <PageTitle>The Blazor Roundup #@issue.Number: @issue.Subject | Enable Dev Mode</PageTitle>
+    <HeadContent>
+        <meta name="description" content="@issue.Preview" />
+        <meta property="og:title" content="@($"The Blazor Roundup #{issue.Number}: {issue.Subject}")" />
+        <meta property="og:description" content="@issue.Preview" />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="@Nav.ToAbsoluteUri(issue.Url)" />
+        <meta property="article:published_time" content="@issue.Sent.ToString("yyyy-MM-dd")" />
+    </HeadContent>
+
+    <Section Spacing="SectionSpacing.Md">
+        <Container Size="ContainerSize.Md" PaddingX="0">
+            <Column Gap="10">
+                <Column Gap="6">
+                    <Breadcrumb>
+                        <BreadcrumbItem Href="/roundup">The Blazor Roundup</BreadcrumbItem>
+                        <BreadcrumbItem>#@issue.Number</BreadcrumbItem>
+                    </Breadcrumb>
+                    <Column Gap="4">
+                        <Overline>Issue #@issue.Number · <time datetime="@issue.Sent.ToString("yyyy-MM-dd")">@IssueDates.Long(issue.Sent)</time></Overline>
+                        <Heading Level="1" Size="TextSize.Xl4" MinSize="TextSize.Xl3" Wrap="TextWrap.Balance">@issue.Subject</Heading>
+                        <TextBlock Size="TextSize.Lg" Color="Color.Muted">@issue.Preview</TextBlock>
+                        <Row Gap="3" Align="Align.Center" PaddingTop="2">
+                            <Avatar Src="images/izzy.jpg" Name="Izzy Dryer" Size="AvatarSize.Md" Decorative />
+                            <TextBlock Size="TextSize.Sm"><TextBlock As="span" Weight="FontWeight.Semibold">Izzy</TextBlock> <TextBlock As="span" Color="Color.Muted">· Enable Dev Mode</TextBlock></TextBlock>
+                        </Row>
+                    </Column>
+                </Column>
+
+                <Divider />
+
+                @* Rendered from the issue's Markdown at startup, with raw HTML turned off (RoundupArchive). *@
+                <Prose Size="ProseSize.Lg">@((MarkupString)issue.Html)</Prose>
+
+                <Grid MinChildWidth="Length.Rem(15)" Gap="4">
+                    @if (previous is not null)
+                    {
+                        <Card Title="@previous.Subject" Href="@previous.Url" Size="ControlSize.Sm" Description="@($"Previous · #{previous.Number}")" />
+                    }
+                    @if (next is not null)
+                    {
+                        <Card Title="@next.Subject" Href="@next.Url" Size="ControlSize.Sm" Description="@($"Next · #{next.Number}")" />
+                    }
+                    @if (previous is null || next is null)
+                    {
+                        <Card Title="All issues" Href="/roundup" Size="ControlSize.Sm" Description="The Blazor Roundup archive" />
+                    }
+                </Grid>
+            </Column>
+        </Container>
+    </Section>
+
+    <NewsletterBand FormName="signup-issue" Source="@($"roundup:{issue.Number}")" Title="Get the next issue by email" />
+}
+
+@code {
+    [Parameter] public int Number { get; set; }
+
+    RoundupIssue? issue;
+    RoundupIssue? previous;
+    RoundupIssue? next;
+
+    protected override void OnParametersSet()
+    {
+        issue = Roundup.Find(Number);
+        if (issue is null)
+        {
+            Nav.NotFound();
+            return;
+        }
+        previous = Roundup.Previous(issue);
+        next = Roundup.Next(issue);
+    }
+}

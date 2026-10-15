@@ -1,72 +1,137 @@
 @page "/"
+@inject RoundupArchive Roundup
 
-<PageTitle>Enable Dev Mode</PageTitle>
+<PageTitle>Enable Dev Mode: The Blazor Roundup</PageTitle>
+<HeadContent>
+    <meta name="description" content="@Description" />
+    <meta property="og:title" content="The Blazor Roundup" />
+    <meta property="og:description" content="@Description" />
+    <meta property="og:type" content="website" />
+</HeadContent>
 
 <Section Spacing="SectionSpacing.Lg">
     <Stack Direction="new() { Base = Direction.Column, Lg = Direction.Row }" Gap="new() { Base = 10, Lg = 16 }" Align="new() { Lg = Align.Center }">
-        <Column Gap="6" Grow>
-            <TextBlock Family="FontFamily.Mono" Size="TextSize.Sm" Color="Color.Muted">dotnet new blazor --name YourNextApp</TextBlock>
-            <Heading Level="1" Size="TextSize.Xl5" MinSize="TextSize.Xl3" Wrap="TextWrap.Balance">Build real apps with Blazor and .NET.</Heading>
-            <TextBlock Size="TextSize.Lg" Color="Color.Muted" MaxWidth="Length.Rem(34)">
-                Complete project builds, from the first commit to deployment. Watch the video, follow the lessons, and grab the code on GitHub.
-            </TextBlock>
-            <Row Gap="3" Wrap>
-                <LinkButton Href="/projects" Size="ControlSize.Lg">Browse projects</LinkButton>
-                <LinkButton Href="@SiteLinks.YouTube" External Size="ControlSize.Lg" Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.YouTube">Watch on YouTube</LinkButton>
-            </Row>
+        <Column Gap="6" Grow Basis="new() { Lg = Length.Px(0) }">
+            <Overline>The Blazor Roundup</Overline>
+            <Heading Level="1" Size="TextSize.Xl5" MinSize="TextSize.Xl3" Wrap="TextWrap.Balance">What shipped in Blazor, and what to do about it.</Heading>
+            <TextBlock Size="TextSize.Lg" Color="Color.Muted" MaxWidth="Length.Rem(34)">@Description</TextBlock>
+            <Column id="newsletter" Gap="2" MaxWidth="Length.Rem(30)">
+                <SignupForm FormName="signup-home" Source="home" />
+                <TextBlock Size="TextSize.Sm" Color="Color.Muted">One email every two weeks. Unsubscribe anytime.</TextBlock>
+            </Column>
         </Column>
-        <Box Basis="Length.Rem(22)" Shrink="false">
-            <Card Title="Latest lessons" TitleLevel="2" Size="ControlSize.Sm">
-                <Actions><Code>main</Code></Actions>
-                <ChildContent>
-                    @if (latestLessons.Count > 0)
-                    {
-                        <LessonLog Items="latestLessons" />
-                    }
-                    else
-                    {
-                        <TextBlock Size="TextSize.Sm" Color="Color.Muted">The first lessons are being recorded. <Anchor Href="/#newsletter">Subscribe</Anchor> to hear when they're out.</TextBlock>
-                    }
-                </ChildContent>
-            </Card>
+        <Box Grow Basis="new() { Lg = Length.Px(0) }">
+            @if (Roundup.Latest is { } latest)
+            {
+                <IssueCard Issue="latest" Featured TitleLevel="2" />
+            }
+            else
+            {
+                <EmptyState Icon="Lucide.Mail" Title="The first issue is on its way" TitleLevel="2" Bordered
+                            Description="Subscribe and it lands in your inbox. Every issue is also published here the day it sends." />
+            }
         </Box>
     </Stack>
 </Section>
 
-<Section Spacing="SectionSpacing.Md" PaddingTop="0">
-    <Column Gap="6">
-        <Row Justify="Justify.Between" Align="Align.Baseline">
-            <Heading Level="2" Size="TextSize.Xl3">Projects</Heading>
-            @if (projects.Count > 0)
-            {
-                <Anchor Href="/projects" Underline="AnchorUnderline.Hover">See all projects</Anchor>
-            }
-        </Row>
-        @if (projects.Count > 0)
-        {
+@if (earlier.Count > 0)
+{
+    <Section Spacing="SectionSpacing.Md" PaddingTop="0">
+        <Column Gap="6">
+            <Row Justify="Justify.Between" Align="Align.Baseline" Wrap Gap="4">
+                <Heading Level="2" Size="TextSize.Xl3">Earlier issues</Heading>
+                <Anchor Href="/roundup" Underline="AnchorUnderline.Hover">All issues</Anchor>
+            </Row>
             <Grid MinChildWidth="Length.Rem(18)" Gap="6">
-                @foreach (var project in projects)
+                @foreach (var issue in earlier)
                 {
-                    <ProjectCard Project="project" />
+                    <IssueCard Issue="issue" />
                 }
             </Grid>
-        }
-        else
-        {
-            <EmptyState Icon="Lucide.Hammer" Title="The first project is on its way" Description="Subscribe below to hear when it's out." Bordered />
-        }
+        </Column>
+    </Section>
+}
+
+<Section Spacing="SectionSpacing.Md">
+    <Column Gap="6">
+        <Column Gap="2" MaxWidth="Length.Prose">
+            <Heading Level="2" Size="TextSize.Xl3">What's in each issue</Heading>
+            <TextBlock Color="Color.Muted">Fifteen to twenty-five items from the past two weeks, each checked against its source.</TextBlock>
+        </Column>
+        <Grid MinChildWidth="Length.Rem(13)" Gap="4">
+            @foreach (var (name, about) in Sections)
+            {
+                <Card Title="@name" Size="ControlSize.Sm">
+                    <TextBlock Size="TextSize.Sm" Color="Color.Muted">@about</TextBlock>
+                </Card>
+            }
+        </Grid>
     </Column>
 </Section>
 
-<NewsletterBand FormName="signup-home" Source="home" />
+@if (ProjectCatalog.HasPublished)
+{
+    <Section Spacing="SectionSpacing.Md">
+        <Stack Direction="new() { Base = Direction.Column, Lg = Direction.Row }" Gap="new() { Base = 8, Lg = 12 }">
+            <Column Gap="6" Grow>
+                <Row Justify="Justify.Between" Align="Align.Baseline">
+                    <Heading Level="2" Size="TextSize.Xl3">Projects</Heading>
+                    <Anchor Href="/projects" Underline="AnchorUnderline.Hover">See all projects</Anchor>
+                </Row>
+                <Grid MinChildWidth="Length.Rem(18)" Gap="6">
+                    @foreach (var project in ProjectCatalog.All.Take(3))
+                    {
+                        <ProjectCard Project="project" />
+                    }
+                </Grid>
+            </Column>
+            @if (latestLessons.Count > 0)
+            {
+                <Box Basis="Length.Rem(22)" Shrink="false">
+                    <Card Title="Latest lessons" TitleLevel="2" Size="ControlSize.Sm">
+                        <Actions><Code>main</Code></Actions>
+                        <ChildContent><LessonLog Items="latestLessons" /></ChildContent>
+                    </Card>
+                </Box>
+            }
+        </Stack>
+    </Section>
+}
+
+<Section Spacing="SectionSpacing.Md" PaddingBottom="16">
+    <Card Title="Built in public" TitleLevel="2" Size="ControlSize.Lg">
+        <ChildContent>
+            <TextBlock Color="Color.Muted" MaxWidth="Length.Prose">This site runs on IzzyBlazor, my component library for Blazor's static server
+                rendering. It's in alpha, and each issue's house notes say what changed and what broke along the way.</TextBlock>
+        </ChildContent>
+        <Footer>
+            <Row Gap="3" Wrap>
+                <LinkButton Href="@SiteLinks.IzzyBlazor" External Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.GitHub">IzzyBlazor on GitHub</LinkButton>
+                <LinkButton Href="@SiteLinks.YouTube" External Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.YouTube">YouTube</LinkButton>
+            </Row>
+        </Footer>
+    </Card>
+</Section>
 
 @code {
+    const string Description = "Every other Thursday: releases, security patches, component libraries and the best articles, each with a line on why it matters to your app. Free, from a developer who builds with Blazor every week.";
+
+    // The issue's own sections, in the order they appear in it.
+    static readonly (string Section, string About)[] Sections =
+    [
+        ("Blazor", "Framework releases, previews and security patches, with what to do about each."),
+        ("Components & libraries", "New versions, breaking changes and license shifts across the ecosystem."),
+        ("Articles & videos", "Fixes and tutorials worth your time."),
+        (".NET & the web", "Tooling and browser changes that touch Blazor apps."),
+        ("From Enable Dev Mode", "What I'm building, including IzzyBlazor."),
+    ];
+
+    IReadOnlyList<RoundupIssue> earlier = [];
     IReadOnlyList<CommitItem> latestLessons = [];
-    IReadOnlyList<Project> projects = [];
 
     protected override void OnInitialized()
     {
+        earlier = Roundup.All.Skip(1).Take(3).ToList();
         latestLessons = ProjectCatalog.LatestLessons(4);
-        projects = ProjectCatalog.All.Take(3).ToList();
     }
 }

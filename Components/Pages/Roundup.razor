@@ -1,0 +1,55 @@
+@page "/roundup"
+@inject RoundupArchive Archive
+
+<PageTitle>The Blazor Roundup | Enable Dev Mode</PageTitle>
+<HeadContent>
+    <meta name="description" content="Every issue of The Blazor Roundup: what shipped in Blazor and .NET, and what to do about it." />
+</HeadContent>
+
+<Section Spacing="SectionSpacing.Lg">
+    <Column Gap="12">
+        <Stack Direction="new() { Base = Direction.Column, Lg = Direction.Row }" Gap="new() { Base = 8, Lg = 16 }" Align="new() { Lg = Align.End }">
+            <Column Gap="4" Grow MaxWidth="Length.Prose">
+                <Overline>Every other Thursday</Overline>
+                <Heading Level="1" Size="TextSize.Xl4" MinSize="TextSize.Xl3">The Blazor Roundup</Heading>
+                <TextBlock Size="TextSize.Lg" Color="Color.Muted">What shipped in Blazor and .NET over the past two weeks, and what to do
+                    about it. Every issue is published here the day it sends.</TextBlock>
+            </Column>
+            <Column Gap="2" Basis="Length.Rem(26)" Shrink="false">
+                <TextBlock Size="TextSize.Sm" Weight="FontWeight.Semibold">Get the next one by email</TextBlock>
+                <SignupForm FormName="signup-roundup" Source="roundup" />
+            </Column>
+        </Stack>
+
+        <Column Gap="0">
+            <Row Justify="Justify.Between" Align="Align.Center" PaddingBottom="4">
+                <Heading Level="2" Size="TextSize.Xl">All issues</Heading>
+                <Anchor Href="/roundup/feed.xml" Underline="AnchorUnderline.Hover"><Icon Name="Lucide.Rss" /> RSS feed</Anchor>
+            </Row>
+            <Divider />
+            @if (Archive.All.Count == 0)
+            {
+                <EmptyState Icon="Lucide.Mail" Title="The first issue is on its way" PaddingY="10"
+                            Description="Subscribe above and it lands in your inbox. It shows up here the same day." />
+            }
+            @foreach (var issue in Archive.All)
+            {
+                <article>
+                    <Grid Template="@(new() { Base = "minmax(0, 1fr)", Md = "9rem minmax(0, 1fr)" })" Gap="new() { Base = 2, Md = 6 }" PaddingY="8">
+                        <Column Gap="1">
+                            <TextBlock Family="FontFamily.Mono" Size="TextSize.Xl2" Weight="FontWeight.Semibold" Color="Color.PrimaryText">#@issue.Number</TextBlock>
+                            <TextBlock Size="TextSize.Sm" Color="Color.Muted"><time datetime="@issue.Sent.ToString("yyyy-MM-dd")">@IssueDates.Short(issue.Sent)</time></TextBlock>
+                        </Column>
+                        <Column Gap="2">
+                            <Heading Level="3" Size="TextSize.Xl" Wrap="TextWrap.Balance">
+                                <Anchor Href="@issue.Url" Inherit Underline="AnchorUnderline.Hover">@issue.Subject</Anchor>
+                            </Heading>
+                            <TextBlock Color="Color.Muted" MaxWidth="Length.Prose">@issue.Preview</TextBlock>
+                        </Column>
+                    </Grid>
+                    <Divider />
+                </article>
+            }
+        </Column>
+    </Column>
+</Section>

@@ -37,6 +37,12 @@ public static class ProjectCatalog
         */
     ];
 
+    /// <summary>
+    /// True once a project's video is out. Until then Projects stays out of the header, the
+    /// footer, the home page and the sitemap; /projects still works for previewing.
+    /// </summary>
+    public static bool HasPublished => All.Any(p => p.Status == ProjectStatus.Published);
+
     /// <summary>Finds a project by slug, ignoring case, so /projects/Signup-Wizard still works.</summary>
     public static Project? Find(string slug) =>
         All.FirstOrDefault(p => string.Equals(p.Slug, slug, StringComparison.OrdinalIgnoreCase));

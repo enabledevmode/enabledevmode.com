@@ -4,9 +4,13 @@
 
 <Section Spacing="SectionSpacing.Lg" PaddingY="new() { Base = 16, Md = 16 }">
     <EmptyState Icon="Lucide.MapPinOff" Title="Page not found" TitleLevel="1" Size="ControlSize.Lg"
-                Description="That page doesn't exist, or it moved. Try the projects list, or head back home.">
+                Description="That page doesn't exist, or it moved. The latest Blazor Roundup is a good place to pick up.">
         <Actions>
-            <LinkButton Href="/projects">Browse projects</LinkButton>
+            <LinkButton Href="/roundup">Read the Roundup</LinkButton>
+            @if (ProjectCatalog.HasPublished)
+            {
+                <LinkButton Href="/projects" Variant="ButtonVariant.Outline" Accent="Accent.Neutral">Browse projects</LinkButton>
+            }
             <LinkButton Href="/" Variant="ButtonVariant.Outline" Accent="Accent.Neutral">Home</LinkButton>
         </Actions>
     </EmptyState>
