@@ -36,7 +36,7 @@
                 <Prose Size="ProseSize.Lg" Class="edm-issue">@((MarkupString)issue.Html)</Prose>
 
                 <nav aria-label="Issues">
-                    <Grid MinChildWidth="Length.Rem(15)" Gap="4">
+                    <Grid Columns="new() { Base = 1, Sm = 2 }" Gap="4">
                         @if (previous is not null)
                         {
                             <Card Title="@($"#{previous.Number}: {previous.Subject}")" Href="@previous.Url" Size="ControlSize.Sm">
@@ -51,7 +51,7 @@
                         }
                         @if (next is not null)
                         {
-                            <Card Title="@($"#{next.Number}: {next.Subject}")" Href="@next.Url" Size="ControlSize.Sm">
+                            <Card Title="@($"#{next.Number}: {next.Subject}")" Href="@next.Url" Size="ControlSize.Sm" Class="edm-next">
                                 <Header><Overline>Next</Overline></Header>
                             </Card>
                         }

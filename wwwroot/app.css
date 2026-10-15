@@ -31,3 +31,6 @@
 
 /* A placeholder box for something not out yet, such as the next issue. */
 .edm-dashed { border-style: dashed; }
+
+/* The issue page's Next card reads from the right edge, opposite Previous. */
+.edm-next { text-align: end; }
