@@ -8,6 +8,12 @@
 else
 {
     <Form Model="Signup" FormName="@FormName" OnValidSubmit="SubmitAsync">
+        @if (Label is not null)
+        {
+            @* Shown above the row so the button lines up with the field. The field keeps its own
+               label for screen readers, so this one is hidden from them. *@
+            <TextBlock Size="TextSize.Sm" Weight="FontWeight.Semibold" aria-hidden="true">@Label</TextBlock>
+        }
         <Row Gap="2" Wrap Align="Align.Start">
             <Box Grow Basis="Length.Rem(14)">
                 <TextField @bind-Value="Signup!.Email" HideLabel Placeholder="you@example.com" AutoComplete="email" Size="ControlSize.Lg" />
@@ -24,6 +30,9 @@ else
 @code {
     [Parameter, EditorRequired] public string FormName { get; set; } = "";
     [Parameter] public string Source { get; set; } = "site";
+
+    /// <summary>A visible caption above the field, such as "Your email". The field's own label stays for screen readers.</summary>
+    [Parameter] public string? Label { get; set; }
 
     [SupplyParameterFromForm] private SignupModel? Signup { get; set; }
     [CascadingParameter] private HttpContext? HttpContext { get; set; }

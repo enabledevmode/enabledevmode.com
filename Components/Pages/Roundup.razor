@@ -8,44 +8,72 @@
 
 <Section Spacing="SectionSpacing.Lg">
     <Column Gap="12">
-        <Stack Direction="new() { Base = Direction.Column, Lg = Direction.Row }" Gap="new() { Base = 8, Lg = 16 }" Align="new() { Lg = Align.End }">
-            <Column Gap="4" Grow MaxWidth="Length.Prose">
+        <Stack Direction="new() { Base = Direction.Column, Lg = Direction.Row }" Gap="new() { Base = 8, Lg = 14 }" Align="new() { Lg = Align.End }" Justify="Justify.Between">
+            <Column Gap="4" MaxWidth="Length.Rem(36)">
                 <Overline>Every other Thursday</Overline>
                 <Heading Level="1" Size="TextSize.Xl4" MinSize="TextSize.Xl3">The Blazor Roundup</Heading>
                 <TextBlock Size="TextSize.Lg" Color="Color.Muted">What shipped in Blazor and .NET over the past two weeks, and what to do
-                    about it. Every issue is published here the day it sends.</TextBlock>
+                    about it. Every issue is here the day it sends.</TextBlock>
             </Column>
-            <Column Gap="2" Basis="Length.Rem(26)" Shrink="false">
-                <TextBlock Size="TextSize.Sm" Weight="FontWeight.Semibold">Get the next one by email</TextBlock>
-                <SignupForm FormName="signup-roundup" Source="roundup" />
-            </Column>
+            <Box Grow MaxWidth="Length.Rem(26)">
+                <SignupForm FormName="signup-roundup" Source="roundup" Label="Get the next one by email" />
+            </Box>
         </Stack>
 
         <Column Gap="0">
             <Row Justify="Justify.Between" Align="Align.Center" PaddingBottom="4">
                 <Heading Level="2" Size="TextSize.Xl">All issues</Heading>
-                <Anchor Href="/roundup/feed.xml" Underline="AnchorUnderline.Hover"><Icon Name="Lucide.Rss" /> RSS feed</Anchor>
+                <Anchor Href="/roundup/feed.xml" Underline="AnchorUnderline.Hover" Weight="FontWeight.Semibold"><Icon Name="Lucide.Rss" /> RSS feed</Anchor>
             </Row>
             <Divider />
+
+            @if (Archive.NextSend is { } next)
+            {
+                <Grid Template="@Columns" Gap="new() { Base = 2, Md = 10 }" PaddingY="8">
+                    <Column Gap="1">
+                        <TextBlock Family="FontFamily.Mono" Size="TextSize.Xl2" Weight="FontWeight.Semibold" Color="Color.Muted">#@(Archive.Latest!.Number + 1)</TextBlock>
+                        <TextBlock Size="TextSize.Sm" Color="Color.Muted">@next.ToString("ddd, MMM d", Invariant)</TextBlock>
+                    </Column>
+                    <Column Gap="1">
+                        <TextBlock Size="TextSize.Lg" Weight="FontWeight.Semibold" Color="Color.Muted">Next issue: @next.ToString("dddd, MMMM d", Invariant)</TextBlock>
+                        <TextBlock Size="TextSize.Sm" Color="Color.Muted">Subscribe and it lands in your inbox; it shows up here the same day.</TextBlock>
+                    </Column>
+                </Grid>
+                <Divider />
+            }
+
             @if (Archive.All.Count == 0)
             {
                 <EmptyState Icon="Lucide.Mail" Title="The first issue is on its way" PaddingY="10"
                             Description="Subscribe above and it lands in your inbox. It shows up here the same day." />
             }
+
             @foreach (var issue in Archive.All)
             {
                 <article>
-                    <Grid Template="@(new() { Base = "minmax(0, 1fr)", Md = "9rem minmax(0, 1fr)" })" Gap="new() { Base = 2, Md = 6 }" PaddingY="8">
+                    <Grid Template="@Columns" Gap="new() { Base = 3, Md = 10 }" PaddingY="8" Align="Align.Center">
                         <Column Gap="1">
                             <TextBlock Family="FontFamily.Mono" Size="TextSize.Xl2" Weight="FontWeight.Semibold" Color="Color.PrimaryText">#@issue.Number</TextBlock>
                             <TextBlock Size="TextSize.Sm" Color="Color.Muted"><time datetime="@issue.Sent.ToString("yyyy-MM-dd")">@IssueDates.Short(issue.Sent)</time></TextBlock>
                         </Column>
-                        <Column Gap="2">
+                        <Column Gap="3">
                             <Heading Level="3" Size="TextSize.Xl" Wrap="TextWrap.Balance">
                                 <Anchor Href="@issue.Url" Inherit Underline="AnchorUnderline.Hover">@issue.Subject</Anchor>
                             </Heading>
                             <TextBlock Color="Color.Muted" MaxWidth="Length.Prose">@issue.Preview</TextBlock>
+                            @if (issue.Tags.Count > 0)
+                            {
+                                <Row Gap="2" Wrap>
+                                    @foreach (var tag in issue.Tags)
+                                    {
+                                        <Badge Pill>@tag</Badge>
+                                    }
+                                </Row>
+                            }
                         </Column>
+                        <Box>
+                            <LinkButton Href="@issue.Url" Variant="ButtonVariant.Outline" Accent="Accent.Neutral" EndIcon="Lucide.ArrowRight" aria-label="@($"Read issue #{issue.Number}")">Read</LinkButton>
+                        </Box>
                     </Grid>
                     <Divider />
                 </article>
@@ -53,3 +81,10 @@
         </Column>
     </Column>
 </Section>
+
+@code {
+    static readonly System.Globalization.CultureInfo Invariant = System.Globalization.CultureInfo.InvariantCulture;
+
+    // Number and date, then the issue, then its Read button; stacked on phones.
+    static readonly Responsive<string> Columns = new() { Base = "minmax(0, 1fr)", Md = "8rem minmax(0, 1fr) auto" };
+}

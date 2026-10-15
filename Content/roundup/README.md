@@ -20,6 +20,7 @@ Hi everyone, Izzy here. ...
 
 - `number` and `sent` (`yyyy-MM-dd`) are required, and so are `subject` and `preview`. Quote them if they contain a colon.
 - The body is the issue as it went out, from the intro to the sign-off. Leave out the editor notes, the subject and preview lines, the Unconfirmed list and the Sources. A leading `# title` is dropped, since the page shows the subject as its title.
+- Two lists in a row with only a blank line between them merge into one. Give the second a different bullet (`*` instead of `-`), as the lead story's notes do in the samples.
 - Plain Markdown only: headings, paragraphs, lists, links, bold, quotes and code. Raw HTML is turned off.
 - A file the site can't read is logged and left out; the rest of the site still starts.
 

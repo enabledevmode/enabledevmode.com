@@ -2,16 +2,20 @@
 
 <PageTitle>Page not found | Enable Dev Mode</PageTitle>
 
-<Section Spacing="SectionSpacing.Lg" PaddingY="new() { Base = 16, Md = 16 }">
-    <EmptyState Icon="Lucide.MapPinOff" Title="Page not found" TitleLevel="1" Size="ControlSize.Lg"
-                Description="That page doesn't exist, or it moved. The latest Blazor Roundup is a good place to pick up.">
-        <Actions>
-            <LinkButton Href="/roundup">Read the Roundup</LinkButton>
-            @if (ProjectCatalog.HasPublished)
-            {
-                <LinkButton Href="/projects" Variant="ButtonVariant.Outline" Accent="Accent.Neutral">Browse projects</LinkButton>
-            }
-            <LinkButton Href="/" Variant="ButtonVariant.Outline" Accent="Accent.Neutral">Home</LinkButton>
-        </Actions>
-    </EmptyState>
+<Section Spacing="SectionSpacing.Lg" PaddingY="16">
+    <Center>
+        <Column Gap="5" Align="Align.Center" MaxWidth="Length.Rem(32)">
+            <TextBlock As="span" Family="FontFamily.Mono" Size="TextSize.Sm" Color="Color.Muted" Bg="Color.SurfaceContainer" Radius="Radius.Md" PaddingX="4" PaddingY="2">404: route not found</TextBlock>
+            <Heading Level="1" Size="TextSize.Xl3" Align="TextAlign.Center">That page doesn't exist</Heading>
+            <TextBlock Color="Color.Muted" Align="TextAlign.Center">It may have moved, or the link has a typo. The latest Blazor Roundup is a good place to pick up.</TextBlock>
+            <Row Gap="3" Wrap Justify="Justify.Center" PaddingTop="2">
+                <LinkButton Href="/roundup">Read the Roundup</LinkButton>
+                @if (ProjectCatalog.HasPublished)
+                {
+                    <LinkButton Href="/projects" Variant="ButtonVariant.Outline" Accent="Accent.Neutral">Browse projects</LinkButton>
+                }
+                <LinkButton Href="/" Variant="ButtonVariant.Outline" Accent="Accent.Neutral">Home</LinkButton>
+            </Row>
+        </Column>
+    </Center>
 </Section>

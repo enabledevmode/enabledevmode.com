@@ -15,3 +15,19 @@
   --edm-logo-tile:   light-dark(#E0E2EB, #32353C);
   --edm-logo-letter: light-dark(#191C22, #E0E2EB);
 }
+
+/* The brand's large-panel radius (radius-lg, 28px), which IzzyBlazor's scale doesn't reach
+   (Radius.Xl is 16px). Used by Panel for the filled bands and feature cards. */
+.edm-panel { border-radius: 1.75rem; }
+
+/* An issue body, inside IzzyBlazor's Prose: each section heading gets a rule above it, as in the
+   email. :where keeps the weight at zero, so anything more specific wins. */
+:where(.edm-issue) :where(h2) {
+  margin-top: var(--ib-space-12);
+  padding-top: var(--ib-space-6);
+  border-top: 1px solid var(--ib-color-border);
+}
+:where(.edm-issue) :where(h2:first-child) { margin-top: var(--ib-space-6); }
+
+/* A placeholder box for something not out yet, such as the next issue. */
+.edm-dashed { border-style: dashed; }

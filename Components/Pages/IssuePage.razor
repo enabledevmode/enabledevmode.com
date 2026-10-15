@@ -1,5 +1,5 @@
 @page "/roundup/{Number:int}"
-@inject RoundupArchive Roundup
+@inject RoundupArchive Archive
 @inject NavigationManager Nav
 
 @if (issue is not null)
@@ -16,42 +16,62 @@
 
     <Section Spacing="SectionSpacing.Md">
         <Container Size="ContainerSize.Md" PaddingX="0">
-            <Column Gap="10">
-                <Column Gap="6">
-                    <Breadcrumb>
-                        <BreadcrumbItem Href="/roundup">The Blazor Roundup</BreadcrumbItem>
-                        <BreadcrumbItem>#@issue.Number</BreadcrumbItem>
-                    </Breadcrumb>
-                    <Column Gap="4">
-                        <Overline>Issue #@issue.Number · <time datetime="@issue.Sent.ToString("yyyy-MM-dd")">@IssueDates.Long(issue.Sent)</time></Overline>
-                        <Heading Level="1" Size="TextSize.Xl4" MinSize="TextSize.Xl3" Wrap="TextWrap.Balance">@issue.Subject</Heading>
-                        <TextBlock Size="TextSize.Lg" Color="Color.Muted">@issue.Preview</TextBlock>
-                        <Row Gap="3" Align="Align.Center" PaddingTop="2">
-                            <Avatar Src="images/izzy.jpg" Name="Izzy Dryer" Size="AvatarSize.Md" Decorative />
-                            <TextBlock Size="TextSize.Sm"><TextBlock As="span" Weight="FontWeight.Semibold">Izzy</TextBlock> <TextBlock As="span" Color="Color.Muted">· Enable Dev Mode</TextBlock></TextBlock>
-                        </Row>
-                    </Column>
+            <Column Gap="8">
+                <Breadcrumb Separator="BreadcrumbSeparator.Slash">
+                    <BreadcrumbItem Href="/roundup">The Blazor Roundup</BreadcrumbItem>
+                    <BreadcrumbItem>#@issue.Number</BreadcrumbItem>
+                </Breadcrumb>
+
+                <Column Gap="4">
+                    <Overline>Issue #@issue.Number · <time datetime="@issue.Sent.ToString("yyyy-MM-dd")">@IssueDates.Long(issue.Sent)</time></Overline>
+                    <Heading Level="1" Size="TextSize.Xl4" MinSize="TextSize.Xl3" Wrap="TextWrap.Balance">@issue.Subject</Heading>
+                    <TextBlock Size="TextSize.Lg" Color="Color.Muted">@issue.Preview</TextBlock>
+                    <Row Gap="3" Align="Align.Center" PaddingTop="2">
+                        <Avatar Src="images/izzy.jpg" Name="Izzy Dryer" Size="AvatarSize.Md" Decorative />
+                        <TextBlock Size="TextSize.Sm"><TextBlock As="span" Weight="FontWeight.Bold">Izzy</TextBlock> <TextBlock As="span" Color="Color.Muted">· Enable Dev Mode</TextBlock></TextBlock>
+                    </Row>
                 </Column>
 
-                <Divider />
-
                 @* Rendered from the issue's Markdown at startup, with raw HTML turned off (RoundupArchive). *@
-                <Prose Size="ProseSize.Lg">@((MarkupString)issue.Html)</Prose>
+                <Prose Size="ProseSize.Lg" Class="edm-issue">@((MarkupString)issue.Html)</Prose>
 
-                <Grid MinChildWidth="Length.Rem(15)" Gap="4">
-                    @if (previous is not null)
-                    {
-                        <Card Title="@previous.Subject" Href="@previous.Url" Size="ControlSize.Sm" Description="@($"Previous · #{previous.Number}")" />
-                    }
-                    @if (next is not null)
-                    {
-                        <Card Title="@next.Subject" Href="@next.Url" Size="ControlSize.Sm" Description="@($"Next · #{next.Number}")" />
-                    }
-                    @if (previous is null || next is null)
-                    {
-                        <Card Title="All issues" Href="/roundup" Size="ControlSize.Sm" Description="The Blazor Roundup archive" />
-                    }
-                </Grid>
+                <nav aria-label="Issues">
+                    <Grid MinChildWidth="Length.Rem(15)" Gap="4">
+                        @if (previous is not null)
+                        {
+                            <Card Title="@($"#{previous.Number}: {previous.Subject}")" Href="@previous.Url" Size="ControlSize.Sm">
+                                <Header><Overline>Previous</Overline></Header>
+                            </Card>
+                        }
+                        else
+                        {
+                            <Card Title="All issues" Href="/roundup" Size="ControlSize.Sm">
+                                <Header><Overline>Archive</Overline></Header>
+                            </Card>
+                        }
+                        @if (next is not null)
+                        {
+                            <Card Title="@($"#{next.Number}: {next.Subject}")" Href="@next.Url" Size="ControlSize.Sm">
+                                <Header><Overline>Next</Overline></Header>
+                            </Card>
+                        }
+                        else if (Archive.NextSend is { } due)
+                        {
+                            <Box Padding="4" Border="1" BorderColor="Color.Border" Radius="Radius.Xl" Class="edm-dashed">
+                                <Column Gap="1" Align="Align.End">
+                                    <Overline>Next</Overline>
+                                    <TextBlock Weight="FontWeight.Semibold">#@(issue.Number + 1) sends @due.ToString("dddd, MMM d", System.Globalization.CultureInfo.InvariantCulture)</TextBlock>
+                                </Column>
+                            </Box>
+                        }
+                        else
+                        {
+                            <Card Title="All issues" Href="/roundup" Size="ControlSize.Sm">
+                                <Header><Overline>Archive</Overline></Header>
+                            </Card>
+                        }
+                    </Grid>
+                </nav>
             </Column>
         </Container>
     </Section>
@@ -68,13 +88,13 @@
 
     protected override void OnParametersSet()
     {
-        issue = Roundup.Find(Number);
+        issue = Archive.Find(Number);
         if (issue is null)
         {
             Nav.NotFound();
             return;
         }
-        previous = Roundup.Previous(issue);
-        next = Roundup.Next(issue);
+        previous = Archive.Previous(issue);
+        next = Archive.Next(issue);
     }
 }

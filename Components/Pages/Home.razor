@@ -1,5 +1,5 @@
 @page "/"
-@inject RoundupArchive Roundup
+@inject RoundupArchive Archive
 
 <PageTitle>Enable Dev Mode: The Blazor Roundup</PageTitle>
 <HeadContent>
@@ -10,40 +10,68 @@
 </HeadContent>
 
 <Section Spacing="SectionSpacing.Lg">
-    <Stack Direction="new() { Base = Direction.Column, Lg = Direction.Row }" Gap="new() { Base = 10, Lg = 16 }" Align="new() { Lg = Align.Center }">
-        <Column Gap="6" Grow Basis="new() { Lg = Length.Px(0) }">
+    <Grid MinChildWidth="Length.Rem(25)" Gap="new() { Base = 10, Lg = 14 }" Align="Align.Center">
+        <Column Gap="6">
             <Overline>The Blazor Roundup</Overline>
             <Heading Level="1" Size="TextSize.Xl5" MinSize="TextSize.Xl3" Wrap="TextWrap.Balance">What shipped in Blazor, and what to do about it.</Heading>
             <TextBlock Size="TextSize.Lg" Color="Color.Muted" MaxWidth="Length.Rem(34)">@Description</TextBlock>
             <Column id="newsletter" Gap="2" MaxWidth="Length.Rem(30)">
-                <SignupForm FormName="signup-home" Source="home" />
+                <SignupForm FormName="signup-home" Source="home" Label="Your email" />
                 <TextBlock Size="TextSize.Sm" Color="Color.Muted">One email every two weeks. Unsubscribe anytime.</TextBlock>
             </Column>
         </Column>
-        <Box Grow Basis="new() { Lg = Length.Px(0) }">
-            @if (Roundup.Latest is { } latest)
-            {
-                <IssueCard Issue="latest" Featured TitleLevel="2" />
-            }
-            else
-            {
-                <EmptyState Icon="Lucide.Mail" Title="The first issue is on its way" TitleLevel="2" Bordered
-                            Description="Subscribe and it lands in your inbox. Every issue is also published here the day it sends." />
-            }
-        </Box>
-    </Stack>
+
+        @if (Archive.Latest is { } latest)
+        {
+            <Panel Padding="new() { Base = 6, Md = 9 }">
+                <Column Gap="5">
+                    <Row Gap="3" Align="Align.Center" Wrap>
+                        <Badge Accent="Accent.Primary" Variant="BadgeVariant.Solid" Pill>Latest</Badge>
+                        <TextBlock As="span" Family="FontFamily.Mono" Size="TextSize.Sm" Color="Color.Muted">#@latest.Number · @IssueDates.Short(latest.Sent)</TextBlock>
+                    </Row>
+                    <Heading Level="2" Size="TextSize.Xl2" Wrap="TextWrap.Balance">
+                        <Anchor Href="@latest.Url" Inherit Underline="AnchorUnderline.Hover">@latest.Subject</Anchor>
+                    </Heading>
+                    <TextBlock Color="Color.Muted">@latest.Preview</TextBlock>
+                    @if (latest.Highlights.Count > 0)
+                    {
+                        <Column Gap="0">
+                            <Divider />
+                            @foreach (var highlight in latest.Highlights)
+                            {
+                                <TextBlock Size="TextSize.Sm" PaddingY="3">@highlight</TextBlock>
+                                <Divider />
+                            }
+                        </Column>
+                    }
+                    <Box>
+                        <LinkButton Href="@latest.Url" Variant="ButtonVariant.Outline" Accent="Accent.Neutral" EndIcon="Lucide.ArrowRight">Read issue #@latest.Number</LinkButton>
+                    </Box>
+                </Column>
+            </Panel>
+        }
+        else
+        {
+            <Panel Padding="new() { Base = 6, Md = 9 }">
+                <Column Gap="3">
+                    <Heading Level="2" Size="TextSize.Xl">The first issue is on its way</Heading>
+                    <TextBlock Color="Color.Muted">Subscribe and it lands in your inbox. Every issue is also published here the day it sends.</TextBlock>
+                </Column>
+            </Panel>
+        }
+    </Grid>
 </Section>
 
-@if (earlier.Count > 0)
+@if (Archive.All.Count > 0)
 {
-    <Section Spacing="SectionSpacing.Md" PaddingTop="0">
-        <Column Gap="6">
-            <Row Justify="Justify.Between" Align="Align.Baseline" Wrap Gap="4">
-                <Heading Level="2" Size="TextSize.Xl3">Earlier issues</Heading>
-                <Anchor Href="/roundup" Underline="AnchorUnderline.Hover">All issues</Anchor>
+    <Section Spacing="SectionSpacing.Lg" BorderTop="1" BorderColor="Color.Border">
+        <Column Gap="8">
+            <Row Justify="Justify.Between" Align="Align.End" Wrap Gap="4">
+                <Heading Level="2" Size="TextSize.Xl3">Latest issues</Heading>
+                <Anchor Href="/roundup" Underline="AnchorUnderline.Hover" Weight="FontWeight.Semibold">All issues</Anchor>
             </Row>
-            <Grid MinChildWidth="Length.Rem(18)" Gap="6">
-                @foreach (var issue in earlier)
+            <Grid MinChildWidth="Length.Rem(18)" Gap="4">
+                @foreach (var issue in Archive.All.Take(3))
                 {
                     <IssueCard Issue="issue" />
                 }
@@ -52,16 +80,16 @@
     </Section>
 }
 
-<Section Spacing="SectionSpacing.Md">
-    <Column Gap="6">
+<Section Spacing="SectionSpacing.Lg" BorderTop="1" BorderColor="Color.Border">
+    <Column Gap="8">
         <Column Gap="2" MaxWidth="Length.Prose">
             <Heading Level="2" Size="TextSize.Xl3">What's in each issue</Heading>
-            <TextBlock Color="Color.Muted">Fifteen to twenty-five items from the past two weeks, each checked against its source.</TextBlock>
+            <TextBlock Color="Color.Muted">Fifteen to twenty-five items, picked from the past two weeks and checked against the source.</TextBlock>
         </Column>
-        <Grid MinChildWidth="Length.Rem(13)" Gap="4">
+        <Grid MinChildWidth="Length.Rem(12.5)" Gap="4">
             @foreach (var (name, about) in Sections)
             {
-                <Card Title="@name" Size="ControlSize.Sm">
+                <Card Title="@name" Variant="CardVariant.Filled" Bg="Color.SurfaceContainer" Size="ControlSize.Md">
                     <TextBlock Size="TextSize.Sm" Color="Color.Muted">@about</TextBlock>
                 </Card>
             }
@@ -71,7 +99,7 @@
 
 @if (ProjectCatalog.HasPublished)
 {
-    <Section Spacing="SectionSpacing.Md">
+    <Section Spacing="SectionSpacing.Lg" BorderTop="1" BorderColor="Color.Border">
         <Stack Direction="new() { Base = Direction.Column, Lg = Direction.Row }" Gap="new() { Base = 8, Lg = 12 }">
             <Column Gap="6" Grow>
                 <Row Justify="Justify.Between" Align="Align.Baseline">
@@ -98,26 +126,27 @@
     </Section>
 }
 
-<Section Spacing="SectionSpacing.Md" PaddingBottom="16">
-    <Card Title="Built in public" TitleLevel="2" Size="ControlSize.Lg">
-        <ChildContent>
-            <TextBlock Color="Color.Muted" MaxWidth="Length.Prose">This site runs on IzzyBlazor, my component library for Blazor's static server
-                rendering. It's in alpha, and each issue's house notes say what changed and what broke along the way.</TextBlock>
-        </ChildContent>
-        <Footer>
-            <Row Gap="3" Wrap>
-                <LinkButton Href="@SiteLinks.IzzyBlazor" External Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.GitHub">IzzyBlazor on GitHub</LinkButton>
-                <LinkButton Href="@SiteLinks.YouTube" External Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.YouTube">YouTube</LinkButton>
+<Section Spacing="SectionSpacing.Lg" PaddingTop="0">
+    <Panel>
+        <Stack Direction="new() { Base = Direction.Column, Lg = Direction.Row }" Gap="new() { Base = 6, Lg = 12 }" Align="new() { Lg = Align.Center }" Justify="Justify.Between">
+            <Column Gap="2" MaxWidth="Length.Prose">
+                <Heading Level="2" Size="TextSize.Xl">Built in public</Heading>
+                <TextBlock Color="Color.Muted">This site runs on IzzyBlazor, my component library for Blazor's static server rendering. It's in
+                    alpha; each issue's house notes say what changed and what broke. Videos will land on YouTube as the projects take shape.</TextBlock>
+            </Column>
+            <Row Gap="3" Wrap Shrink="false">
+                <LinkButton Href="@SiteLinks.IzzyBlazor" External HideExternalIcon Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.GitHub">IzzyBlazor on GitHub</LinkButton>
+                <LinkButton Href="@SiteLinks.YouTube" External HideExternalIcon Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.YouTube">YouTube</LinkButton>
             </Row>
-        </Footer>
-    </Card>
+        </Stack>
+    </Panel>
 </Section>
 
 @code {
     const string Description = "Every other Thursday: releases, security patches, component libraries and the best articles, each with a line on why it matters to your app. Free, from a developer who builds with Blazor every week.";
 
     // The issue's own sections, in the order they appear in it.
-    static readonly (string Section, string About)[] Sections =
+    static readonly (string Name, string About)[] Sections =
     [
         ("Blazor", "Framework releases, previews and security patches, with what to do about each."),
         ("Components & libraries", "New versions, breaking changes and license shifts across the ecosystem."),
@@ -126,12 +155,7 @@
         ("From Enable Dev Mode", "What I'm building, including IzzyBlazor."),
     ];
 
-    IReadOnlyList<RoundupIssue> earlier = [];
     IReadOnlyList<CommitItem> latestLessons = [];
 
-    protected override void OnInitialized()
-    {
-        earlier = Roundup.All.Skip(1).Take(3).ToList();
-        latestLessons = ProjectCatalog.LatestLessons(4);
-    }
+    protected override void OnInitialized() => latestLessons = ProjectCatalog.LatestLessons(4);
 }

@@ -18,8 +18,13 @@ namespace EnableDevMode.Data;
 /// sent: 2026-10-22
 /// subject: "The subject line as sent"
 /// preview: "The preview text as sent"
+/// highlights:
+///   - Up to three one-line highlights for the home page
+/// tags: [Security, Radzen 12.1]
 /// ---
 /// </code>
+/// <c>highlights</c> and <c>tags</c> are optional; each is a list, written either as indented
+/// <c>- item</c> lines or as <c>[a, b]</c> on one line.
 /// The body is Markdown. Raw HTML is turned off, so nothing in a draft can change the page around
 /// it, and a leading # heading is dropped because the page shows the subject as its title. A file
 /// that can't be read is logged and left out rather than stopping the site.
@@ -72,6 +77,21 @@ public sealed partial class RoundupArchive
     /// <summary>The issue sent after this one, or null for the latest.</summary>
     public RoundupIssue? Next(RoundupIssue issue) => All.LastOrDefault(i => i.Number > issue.Number);
 
+    /// <summary>
+    /// When the next issue is due: two weeks after the latest, as long as that's today or later.
+    /// Null before the first issue, or when a send is overdue (so the site never shows a past date).
+    /// </summary>
+    public DateOnly? NextSend
+    {
+        get
+        {
+            if (Latest is null) return null;
+            var next = Latest.Sent.AddDays(14);
+            var today = DateOnly.FromDateTime(TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "America/New_York"));
+            return next >= today ? next : null;
+        }
+    }
+
     /// <summary>Reads one issue file: front matter, then the Markdown body.</summary>
     public static RoundupIssue Parse(string text)
     {
@@ -83,12 +103,38 @@ public sealed partial class RoundupArchive
         if (end < 0) throw new FormatException("the front matter has no closing --- line.");
 
         var fields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var lists = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+        string? listKey = null;
         foreach (var line in text[4..end].Split('\n'))
         {
+            var trimmed = line.Trim();
+            if (listKey is not null && trimmed.StartsWith("- ", StringComparison.Ordinal))
+            {
+                lists[listKey].Add(Unquote(trimmed[2..].Trim()));
+                continue;
+            }
+            listKey = null;
+
             var colon = line.IndexOf(':');
             if (colon <= 0) continue;
-            fields[line[..colon].Trim()] = Unquote(line[(colon + 1)..].Trim());
+            var key = line[..colon].Trim();
+            var value = line[(colon + 1)..].Trim();
+            if (value.Length == 0)
+            {
+                listKey = key;
+                lists[key] = [];
+            }
+            else if (value.StartsWith('[') && value.EndsWith(']'))
+            {
+                lists[key] = value[1..^1].Split(',').Select(v => Unquote(v.Trim())).Where(v => v.Length > 0).ToList();
+            }
+            else
+            {
+                fields[key] = Unquote(value);
+            }
         }
+
+        IReadOnlyList<string> List(string name) => lists.TryGetValue(name, out var items) ? items : [];
 
         string Field(string name) =>
             fields.TryGetValue(name, out var value) && value.Length > 0
@@ -104,7 +150,8 @@ public sealed partial class RoundupArchive
         if (document.FirstOrDefault(b => b is not Markdig.Extensions.Yaml.YamlFrontMatterBlock) is HeadingBlock { Level: 1 } title)
             document.Remove(title);
 
-        return new RoundupIssue(number, sent, Field("subject"), Field("preview"), document.ToHtml(Pipeline));
+        return new RoundupIssue(number, sent, Field("subject"), Field("preview"), document.ToHtml(Pipeline),
+            List("highlights").Take(3).ToList(), List("tags"));
     }
 
     static string Unquote(string value) =>
