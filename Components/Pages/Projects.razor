@@ -34,7 +34,7 @@
                             <TextBlock Color="Color.Muted" MaxWidth="Length.Prose">@project.Summary</TextBlock>
                             <Row Gap="2">
                                 <LinkButton Href="@($"/projects/{project.Slug}")" Variant="ButtonVariant.Soft" Size="ControlSize.Sm">View project</LinkButton>
-                                <LinkButton Href="@project.RepoUrl" External Variant="ButtonVariant.Ghost" Accent="Accent.Neutral" Size="ControlSize.Sm" StartIcon="Brands.GitHub">Code</LinkButton>
+                                <LinkButton Href="@project.RepoUrl" External Variant="ButtonVariant.Ghost" Accent="Accent.Neutral" Size="ControlSize.Sm" StartIcon="SiteIcons.GitHub">Code</LinkButton>
                             </Row>
                         </Column>
                     </Grid>
