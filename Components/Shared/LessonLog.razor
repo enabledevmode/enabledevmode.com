@@ -1,0 +1,33 @@
+@* Lessons as a commit log: IzzyBlazor's Timeline, one item per lesson. *@
+<Timeline>
+    @foreach (var item in Items)
+    {
+        <TimelineItem Title="@item.Title" Time="@item.Meta" Current="item.Latest">
+            <Column Gap="2">
+                @if (item.Description is not null)
+                {
+                    <TextBlock MaxWidth="Length.Prose">@item.Description</TextBlock>
+                }
+                <Row Gap="4" Wrap Align="Align.Center">
+                    @if (item.Sha is not null && item.CommitUrl is not null)
+                    {
+                        <Anchor Href="@item.CommitUrl" Underline="AnchorUnderline.Hover"><Code>@item.Sha</Code></Anchor>
+                    }
+                    @if (item.WatchUrl is not null)
+                    {
+                        <LinkButton Href="@item.WatchUrl" External HideExternalIcon Variant="ButtonVariant.Link" Size="ControlSize.Sm" StartIcon="Lucide.Play">Watch from @item.WatchLabel</LinkButton>
+                    }
+                    @if (Detailed && item.CommitUrl is not null)
+                    {
+                        <LinkButton Href="@item.CommitUrl" External HideExternalIcon Variant="ButtonVariant.Link" Size="ControlSize.Sm" StartIcon="Lucide.Code">Code at this step</LinkButton>
+                    }
+                </Row>
+            </Column>
+        </TimelineItem>
+    }
+</Timeline>
+
+@code {
+    [Parameter, EditorRequired] public IReadOnlyList<CommitItem> Items { get; set; } = [];
+    [Parameter] public bool Detailed { get; set; }
+}
