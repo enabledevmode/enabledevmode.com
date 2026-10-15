@@ -34,3 +34,17 @@
 
 /* The issue page's Next card reads from the right edge, opposite Previous. */
 .edm-next { text-align: end; }
+
+/* Header nav links as pills, like every other control in the theme, with the current page in a
+   neutral fill (the mockup's surface-container) rather than IzzyBlazor's blue tint. IzzyBlazor's
+   nav items use radius-md where buttons use radius-control; noted as library feedback. The phone
+   menu sheet keeps the library's look. */
+.ib-header-nav-bar .ib-nav-item {
+  border-radius: var(--ib-radius-control);
+  padding-inline: var(--ib-space-4);
+}
+.ib-header-nav-bar .ib-nav-item-active,
+.ib-header-nav-bar .ib-nav-item-active:hover {
+  background-color: var(--ib-color-surface-container);
+  color: var(--ib-color-on-surface);
+}
