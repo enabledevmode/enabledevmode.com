@@ -1,0 +1,8 @@
+@* A filled, rounded band: the brand's large panel (surface-container fill, 28px corners). *@
+<Box Bg="Color.SurfaceContainer" Class="edm-panel" Padding="@Padding" id="@Id">@ChildContent</Box>
+
+@code {
+    [Parameter, EditorRequired] public RenderFragment ChildContent { get; set; } = default!;
+    [Parameter] public Responsive<int> Padding { get; set; } = new() { Base = 6, Md = 10 };
+    [Parameter] public string? Id { get; set; }
+}

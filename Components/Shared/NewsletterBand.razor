@@ -1,19 +1,22 @@
-<Section id="newsletter" Bg="Color.SurfaceContainerLow" Spacing="SectionSpacing.Lg">
-    <Stack Direction="new() { Base = Direction.Column, Lg = Direction.Row }" Gap="new() { Base = 6, Lg = 16 }" Align="new() { Lg = Align.Center }">
-        <Column Gap="3" Grow MaxWidth="Length.Prose">
-            <Heading Level="2" Size="TextSize.Xl3">The Blazor Roundup</Heading>
-            <TextBlock Size="TextSize.Lg" Color="Color.Muted">A short email every two weeks: the best Blazor articles and videos, library
-                releases, one practical tip, and new projects as they ship.</TextBlock>
-            <TextBlock Size="TextSize.Sm" Color="Color.Subtle">Subscribers also hear first about the full course, with a founder price.</TextBlock>
-        </Column>
-        <Column Gap="2" Basis="Length.Rem(26)" Shrink="false">
-            <SignupForm FormName="@FormName" Source="@Source" />
-            <TextBlock Size="TextSize.Xs" Color="Color.Subtle">Every two weeks. Unsubscribe anytime. Your email is used only for the newsletter.</TextBlock>
-        </Column>
-    </Stack>
+@* The newsletter signup at the foot of a page: a filled panel with the pitch beside the form. *@
+<Section Spacing="SectionSpacing.Lg">
+    <Panel Id="newsletter">
+        <Stack Direction="new() { Base = Direction.Column, Lg = Direction.Row }" Gap="new() { Base = 6, Lg = 12 }" Align="new() { Lg = Align.Center }">
+            <Column Gap="2" Grow Basis="new() { Lg = Length.Rem(20) }">
+                <Heading Level="2" Size="TextSize.Xl">@Title</Heading>
+                <TextBlock Color="Color.Muted">What shipped in Blazor and .NET, every other Thursday. Unsubscribe anytime.</TextBlock>
+            </Column>
+            <Box Grow Basis="new() { Lg = Length.Rem(22) }">
+                <SignupForm FormName="@FormName" Source="@Source" />
+            </Box>
+        </Stack>
+    </Panel>
 </Section>
 
 @code {
     [Parameter, EditorRequired] public string FormName { get; set; } = "";
     [Parameter] public string Source { get; set; } = "site";
+
+    /// <summary>The heading; issue pages ask for the next issue instead.</summary>
+    [Parameter] public string Title { get; set; } = "Get The Blazor Roundup";
 }

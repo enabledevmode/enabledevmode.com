@@ -5,10 +5,14 @@
         <AppBrand Label="Enable Dev Mode" Href="/" HideLabel>
             <Logo><Wordmark /></Logo>
         </AppBrand>
-        <Box Grow />
+        @* The nav sits beside the logo; on phones it folds into a menu button at the end of the header. *@
         <HeaderNav Label="Site">
             <ChildContent>
-                <NavItem Href="/projects">Projects</NavItem>
+                <NavItem Href="/roundup">The Roundup</NavItem>
+                @if (ProjectCatalog.HasPublished)
+                {
+                    <NavItem Href="/projects">Projects</NavItem>
+                }
                 <NavItem Href="/about">About</NavItem>
             </ChildContent>
             <PanelHeader><Brand /></PanelHeader>
@@ -22,6 +26,7 @@
                 </Column>
             </PanelFooter>
         </HeaderNav>
+        <Box Grow />
         <Row Gap="1" Align="Align.Center">
             <IconButton VisibleFrom="Breakpoint.Md" Icon="Brands.YouTube" Label="YouTube" Href="@SiteLinks.YouTube" Variant="ButtonVariant.Ghost" Accent="Accent.Neutral" />
             <IconButton VisibleFrom="Breakpoint.Md" Icon="Brands.GitHub" Label="GitHub" Href="@SiteLinks.GitHub" Variant="ButtonVariant.Ghost" Accent="Accent.Neutral" />
@@ -37,14 +42,19 @@
             <Column Gap="2">
                 <Brand />
                 <TextBlock Size="TextSize.Sm" Color="Color.Muted">Learn. Build. Ship.</TextBlock>
-                <TextBlock Size="TextSize.Xs" Color="Color.Subtle">© @DateTime.Now.Year Enable Dev Mode</TextBlock>
+                <TextBlock Size="TextSize.Xs" Color="Color.Subtle">© @DateTime.Now.Year Enable Dev Mode · Built with <Anchor Href="@SiteLinks.IzzyBlazor" Inherit>IzzyBlazor</Anchor> (alpha)</TextBlock>
             </Column>
             <Row Gap="6" Wrap Align="Align.Start">
-                <Anchor Href="/projects" Inherit Underline="AnchorUnderline.Hover">Projects</Anchor>
+                <Anchor Href="/roundup" Inherit Underline="AnchorUnderline.Hover">The Roundup</Anchor>
+                @if (ProjectCatalog.HasPublished)
+                {
+                    <Anchor Href="/projects" Inherit Underline="AnchorUnderline.Hover">Projects</Anchor>
+                }
                 <Anchor Href="/about" Inherit Underline="AnchorUnderline.Hover">About</Anchor>
                 <Anchor Href="@SiteLinks.YouTube" Inherit Underline="AnchorUnderline.Hover">YouTube</Anchor>
                 <Anchor Href="@SiteLinks.GitHub" Inherit Underline="AnchorUnderline.Hover">GitHub</Anchor>
                 <Anchor Href="@SiteLinks.EmailHref" Inherit Underline="AnchorUnderline.Hover">@SiteLinks.Email</Anchor>
+                <Anchor Href="/roundup/feed.xml" Inherit Underline="AnchorUnderline.Hover">RSS</Anchor>
             </Row>
         </Stack>
     </AppFooter>

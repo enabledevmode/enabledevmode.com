@@ -8,7 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IzzyBlazor" Version="0.1.0-alpha.2" />
+    <PackageReference Include="IzzyBlazor" Version="0.1.0-alpha.3" />
+    <PackageReference Include="Markdig" Version="1.4.0" />
+  </ItemGroup>
+
+  <!-- The Blazor Roundup's issues ship with the app and are read at startup (Data/RoundupArchive.cs). -->
+  <ItemGroup>
+    <None Update="Content\**\*.md" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

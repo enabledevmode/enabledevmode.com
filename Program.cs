@@ -31,6 +31,12 @@ builder.Services.AddRateLimiter(options =>
 });
 builder.Services.AddOutputCache();
 
+// The Blazor Roundup's issues, read once from Content/roundup at startup. A new issue goes live
+// with the deploy that adds its file.
+builder.Services.AddSingleton(sp => new RoundupArchive(
+    Path.Combine(sp.GetRequiredService<IWebHostEnvironment>().ContentRootPath, "Content", "roundup"),
+    sp.GetRequiredService<ILogger<RoundupArchive>>()));
+
 // Fly's proxy passes the original scheme and client address; trust them so the sitemap and
 // redirects use https.
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
@@ -56,10 +62,12 @@ if (app.Environment.IsDevelopment()) app.UseHttpsRedirection();
 app.UseRateLimiter();
 
 app.UseAntiforgery();
-app.UseOutputCache();   // only the sitemap opts in; pages carry a form, so they aren't cached
+app.UseOutputCache();   // only the sitemap and feed opt in; pages carry a form, so they aren't cached
 
 app.MapStaticAssets();
-app.MapGet("/sitemap.xml", (HttpContext http) => Sitemap.Build(http, ProjectCatalog.All))
+app.MapGet("/sitemap.xml", (HttpContext http, RoundupArchive roundup) => Sitemap.Build(http, roundup.All, ProjectCatalog.All))
+   .CacheOutput(p => p.Expire(TimeSpan.FromHours(1)));
+app.MapGet("/roundup/feed.xml", (HttpContext http, RoundupArchive roundup) => RoundupFeed.Build(http, roundup.All))
    .CacheOutput(p => p.Expire(TimeSpan.FromHours(1)));
 app.MapRazorComponents<App>();
 app.MapIzzyBlazor();

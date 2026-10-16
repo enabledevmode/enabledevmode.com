@@ -1,0 +1,14 @@
+@* One Roundup issue as a filled card linking to its page: number and date, subject, preview text. *@
+<Card Title="@Issue.Subject" TitleLevel="@TitleLevel" Href="@Issue.Url" Variant="CardVariant.Filled" Bg="Color.SurfaceContainer" Size="ControlSize.Lg">
+    <Header>
+        <TextBlock As="span" Family="FontFamily.Mono" Size="TextSize.Sm" Color="Color.Muted">#@Issue.Number · @IssueDates.Short(Issue.Sent)</TextBlock>
+    </Header>
+    <ChildContent>
+        <TextBlock Size="TextSize.Sm" Color="Color.Muted">@Issue.Preview</TextBlock>
+    </ChildContent>
+</Card>
+
+@code {
+    [Parameter, EditorRequired] public RoundupIssue Issue { get; set; } = default!;
+    [Parameter] public int TitleLevel { get; set; } = 3;
+}

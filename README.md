@@ -2,7 +2,7 @@
 
 Source for [enabledevmode.com](https://enabledevmode.com), the website for the [Enable Dev Mode](https://www.youtube.com/@enabledevmode) YouTube channel. **Learn. Build. Ship.**
 
-The site lists the channel's projects. Each project page summarizes what you'll build, links every lesson to its point in the video and to the code at that step, and collects tips learned along the way. It's also where you sign up for **The Blazor Roundup**, a short email every two weeks.
+For now the site is the home of **The Blazor Roundup**, an email every other Thursday on what shipped in Blazor and .NET and what to do about it. The home page sells it, and every sent issue is published at `/roundup/<number>`. Project pages are built and go live once the first project video is out (see [Adding a project](#adding-a-project)).
 
 ## Stack
 
@@ -31,12 +31,20 @@ dotnet user-secrets set "Newsletter:ApiKey" "<Kit v4 API key>"
 ```
 Components/
   Layout/     MainLayout (IzzyBlazor's AppShell: header, main, footer)
-  Pages/      Home, Projects, ProjectPage, About, NotFound
-  Shared/     Wordmark, Brand, Logo, ProjectCard, LessonLog, StatusBadge, SignupForm, NewsletterBand
-Data/         Project records, ProjectCatalog, SiteLinks
-Services/     NewsletterClient (calls the email provider), Sitemap
-wwwroot/      app.css (one override), images
+  Pages/      Home, Roundup (archive), IssuePage, Projects, ProjectPage, About, NotFound
+  Shared/     Wordmark, Brand, Logo, Overline, IssueCard, ProjectCard, LessonLog, StatusBadge, SignupForm, NewsletterBand
+Content/
+  roundup/    one Markdown file per sent Roundup issue (001.md, 002.md, ...)
+Data/         RoundupArchive and RoundupIssue, Project records and ProjectCatalog, SiteLinks
+Services/     NewsletterClient (calls the email provider), Sitemap, RoundupFeed (/roundup/feed.xml)
+wwwroot/      app.css (brand colors), images
 ```
+
+## Publishing a Roundup issue
+
+Each sent issue is one Markdown file in `Content/roundup/`, named with its number in three digits, with front matter for the number, send date, subject and preview text. [`Content/roundup/README.md`](Content/roundup/README.md) has the format. Push it to `main` and the deploy publishes the issue page, and updates the home page, the archive at `/roundup`, the sitemap and the RSS feed.
+
+Issues are read once at startup and rendered with [Markdig](https://github.com/xoofx/markdig) into IzzyBlazor's `Prose`. Raw HTML in an issue is shown as text, not run. A file that can't be read is logged and skipped.
 
 ## Adding a project
 
@@ -45,7 +53,7 @@ Projects are data, not pages. To add one:
 1. Add a `Project` record to `Data/ProjectCatalog.cs`. The slug is lowercase with hyphens and matches the project's repo name, for example `signup-wizard` for `github.com/enabledevmode/signup-wizard`.
 2. Add its cover and gallery images under `wwwroot/images/projects/<slug>/`.
 
-The home page, the Projects page, the project page at `/projects/<slug>`, and the sitemap all pick it up automatically.
+The home page, the Projects page, the project page at `/projects/<slug>`, and the sitemap all pick it up automatically. Projects stays out of the header, the footer, the home page and the sitemap until a project's `Status` is `Published` (`ProjectCatalog.HasPublished`); `/projects` works before that for previewing.
 
 ## Design system
 

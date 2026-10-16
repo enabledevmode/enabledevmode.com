@@ -3,42 +3,50 @@
 <PageTitle>About | Enable Dev Mode</PageTitle>
 
 <Section Spacing="SectionSpacing.Lg">
-    <Column Gap="14" MaxWidth="Length.Prose">
-        <Column Gap="8">
-            <Row Gap="5" Align="Align.Center">
-                @* The photo falls back to initials if it fails to load. *@
-                <Avatar Src="images/izzy.jpg" Name="Izzy Dryer" Size="AvatarSize.Xl2" />
-                <Column Gap="2">
-                    <Heading Level="1" Size="TextSize.Xl4" MinSize="TextSize.Xl3">Hi, I'm Izzy</Heading>
-                    <TextBlock Size="TextSize.Lg" Color="Color.Muted">Software developer and the person behind Enable Dev Mode.</TextBlock>
-                </Column>
-            </Row>
-            <Column Gap="4">
-                <TextBlock>I'm a software developer who works mostly in Angular, with Python and C# along the way, and I've
-                    built software for accounting and warehousing teams.</TextBlock>
-                <TextBlock>Enable Dev Mode is about building practical skills you can actually use, whether that's landing a
-                    better job, leveling up at the one you have, or building and selling apps of your own. I teach what
-                    has paid off for me, through projects you can finish and use.</TextBlock>
+    <Column Gap="16">
+        <Stack Direction="new() { Base = Direction.Column, Md = Direction.Row }" Gap="new() { Base = 8, Md = 14 }" Align="new() { Md = Align.Center }">
+            <Image Src="images/izzy.jpg" Alt="Izzy" Width="Length.Px(200)" Height="Length.Px(200)" Radius="Radius.Full" Shrink="false" Lazy="false" />
+            <Column Gap="4" MaxWidth="Length.Prose">
+                <Overline>Learn. Build. Ship.</Overline>
+                <Heading Level="1" class="edm-display">Hi, I'm Izzy</Heading>
+                <TextBlock Size="TextSize.Xl" Color="Color.Muted">Software developer and the person behind Enable Dev Mode.</TextBlock>
+                <TextBlock>I work mostly in Angular, with Python and C# along the way, and I've built software for accounting and
+                    warehousing teams.</TextBlock>
+                <TextBlock>Right now I'm building with Blazor and .NET. The main piece is <Anchor Href="@SiteLinks.IzzyBlazor" External>IzzyBlazor</Anchor>,
+                    a component library for Blazor's static server rendering. This site runs on it, so every rough edge I hit here goes back
+                    into the library.</TextBlock>
+                <TextBlock>Tutorials and project videos will come, but not on a schedule. They'll grow out of what I'm building, once
+                    there's something worth teaching.</TextBlock>
+                <Row Gap="3" Wrap PaddingTop="2">
+                    <LinkButton Href="@SiteLinks.EmailHref" StartIcon="Lucide.Mail">@SiteLinks.Email</LinkButton>
+                    <LinkButton Href="@SiteLinks.YouTube" External HideExternalIcon Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.YouTube">YouTube</LinkButton>
+                    <LinkButton Href="@SiteLinks.GitHub" External HideExternalIcon Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.GitHub">GitHub</LinkButton>
+                </Row>
             </Column>
-        </Column>
+        </Stack>
 
-        <Column Gap="5">
-            <Heading Level="2" Size="TextSize.Xl2">What you'll find here</Heading>
-            <DescriptionList Orientation="Orientation.Vertical" Divided>
-                <DescriptionItem Term="Project builds">Complete apps you can follow from the first commit to deployment.</DescriptionItem>
-                <DescriptionItem Term="Short explainers">New framework features and when to use them.</DescriptionItem>
-                <DescriptionItem Term="IzzyBlazor">The component library this site is built with, taught in the open.</DescriptionItem>
-                <DescriptionItem Term="The Blazor Roundup">A newsletter every two weeks with the best Blazor links and a practical tip.</DescriptionItem>
-            </DescriptionList>
-        </Column>
-
-        <Column Gap="5">
-            <Heading Level="2" Size="TextSize.Xl2">Get in touch</Heading>
-            <Row Gap="3" Wrap>
-                <LinkButton Href="@SiteLinks.EmailHref" Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Lucide.Mail">@SiteLinks.Email</LinkButton>
-                <LinkButton Href="@SiteLinks.YouTube" External Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.YouTube">YouTube</LinkButton>
-                <LinkButton Href="@SiteLinks.GitHub" External Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.GitHub">GitHub</LinkButton>
-            </Row>
+        <Column Gap="6">
+            <Heading Level="2" Size="TextSize.Xl3">What you'll find here</Heading>
+            <Grid MinChildWidth="Length.Rem(15)" Gap="4">
+                <Card Title="The Blazor Roundup" Href="/roundup" Variant="CardVariant.Filled" Bg="Color.SurfaceContainer">
+                    <TextBlock Size="TextSize.Sm" Color="Color.Muted">What shipped in Blazor and .NET and what to do about it, every other Thursday.</TextBlock>
+                </Card>
+                <Card Title="IzzyBlazor" Href="@SiteLinks.IzzyBlazor" Variant="CardVariant.Filled" Bg="Color.SurfaceContainer">
+                    <TextBlock Size="TextSize.Sm" Color="Color.Muted">The component library this site is built with, in alpha. Each Roundup notes what changed.</TextBlock>
+                </Card>
+                @if (ProjectCatalog.HasPublished)
+                {
+                    <Card Title="Projects" Href="/projects" Variant="CardVariant.Filled" Bg="Color.SurfaceContainer">
+                        <TextBlock Size="TextSize.Sm" Color="Color.Muted">Apps I've built, with the video, the lessons and the code.</TextBlock>
+                    </Card>
+                }
+                else
+                {
+                    <Card Title="Videos, later" Variant="CardVariant.Filled" Bg="Color.SurfaceContainer">
+                        <TextBlock Size="TextSize.Sm" Color="Color.Muted">As the projects take shape. The Roundup will say when the first one is out.</TextBlock>
+                    </Card>
+                }
+            </Grid>
         </Column>
     </Column>
 </Section>
