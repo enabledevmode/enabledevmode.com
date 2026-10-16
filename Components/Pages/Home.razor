@@ -13,10 +13,10 @@
     <Grid MinChildWidth="Length.Rem(25)" Gap="new() { Base = 10, Lg = 14 }" Align="Align.Center">
         <Column Gap="6">
             <Overline>The Blazor Roundup</Overline>
-            <Heading Level="1" Size="TextSize.Xl5" MinSize="TextSize.Xl3" Wrap="TextWrap.Balance">What shipped in Blazor, and what to do about it.</Heading>
+            <Heading Level="1" class="edm-display" Wrap="TextWrap.Balance">What shipped in Blazor, and what to do about it.</Heading>
             <TextBlock Size="TextSize.Lg" Color="Color.Muted" MaxWidth="Length.Rem(34)">@Description</TextBlock>
             <Column id="newsletter" Gap="2" MaxWidth="Length.Rem(30)">
-                <SignupForm FormName="signup-home" Source="home" Label="Your email" />
+                <SignupForm FormName="signup-home" Source="home" />
                 <TextBlock Size="TextSize.Sm" Color="Color.Muted">One email every two weeks. Unsubscribe anytime.</TextBlock>
             </Column>
         </Column>
@@ -29,7 +29,7 @@
                         <Badge Accent="Accent.Primary" Variant="BadgeVariant.Solid" Pill>Latest</Badge>
                         <TextBlock As="span" Family="FontFamily.Mono" Size="TextSize.Sm" Color="Color.Muted">#@latest.Number · @IssueDates.Short(latest.Sent)</TextBlock>
                     </Row>
-                    <Heading Level="2" Size="TextSize.Xl2" Wrap="TextWrap.Balance">
+                    <Heading Level="2" Size="new() { Base = TextSize.Xl, Md = TextSize.Xl2 }" Wrap="TextWrap.Balance">
                         <Anchor Href="@latest.Url" Inherit Underline="AnchorUnderline.Hover">@latest.Subject</Anchor>
                     </Heading>
                     <TextBlock Color="Color.Muted">@latest.Preview</TextBlock>

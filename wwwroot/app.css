@@ -1,11 +1,31 @@
 /* Enable Dev Mode brand on top of IzzyBlazor (IzzyTheme in App.razor sets the brand blue, the page
    gray and pill-shaped controls). These plain rules win over IzzyBlazor's cascade layers. */
 :root {
-  /* The brand's own dark tones (Material 3), which differ from what IzzyTheme derives from one
-     color. The page and grays come from IzzyTheme's Gray, so its light and dark ladders stay whole. */
+  /* The brand's own tones (Material 3, seeded from #2F80ED), which differ from what IzzyTheme
+     derives from one color: the blues, and grays with the brand's slight blue tint. */
   --ib-color-primary:      light-dark(#005AB6, #ABC7FF);
   --ib-color-on-primary:   light-dark(#FFFFFF, #002F65);
   --ib-color-primary-text: light-dark(#005AB6, #ABC7FF);
+
+  --ib-color-background:              light-dark(#F9F9FF, #10131A); /* surface */
+  --ib-color-surface:                 light-dark(#F9F9FF, #10131A);
+  --ib-color-surface-container-low:   light-dark(#F3F3FD, #191C22);
+  --ib-color-surface-container:       light-dark(#ECEDF7, #1D2026); /* cards and panels */
+  --ib-color-surface-container-high:  light-dark(#E6E8F1, #272A31);
+  --ib-color-on-surface:              light-dark(#191C22, #E0E2EB);
+  --ib-color-muted:                   light-dark(#414753, #C1C6D5); /* on-surface-variant */
+  --ib-color-outline:                 light-dark(#727785, #8B919F); /* control edges */
+  --ib-color-border:                  light-dark(#C1C6D5, #414753); /* outline-variant: dividers */
+
+  /* The brand's type scale: display 56px for the hero, headline 34px for section and page titles,
+     and 28px for the latest issue's title. Steps the site doesn't use keep IzzyBlazor's values. */
+  --ib-text-2xl: 1.75rem;
+  --ib-text-3xl: 2.125rem;
+  --ib-text-5xl: 3.5rem;
+
+  /* Large controls (the signup field and button) at the brand's 48px, and a 72px header. */
+  --ib-control-h-lg: 3rem;
+  --ib-shell-header-h: 4.5rem;
 
   /* The brand's warm highlight, for small uppercase labels: at most one per view
      (Color.Token("tertiary")). */
@@ -29,6 +49,13 @@
 }
 :where(.edm-issue) :where(h2:first-child) { margin-top: var(--ib-space-6); }
 
+/* The brand's display style for the home and About heroes: 38px on phones, growing to 56px. */
+.edm-display {
+  font-size: clamp(2.375rem, 1.6rem + 2.5vw, 3.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.0625rem;
+}
+
 /* A placeholder box for something not out yet, such as the next issue. */
 .edm-dashed { border-style: dashed; }
 
@@ -42,7 +69,13 @@
 .ib-header-nav-bar .ib-nav-item {
   border-radius: var(--ib-radius-control);
   padding-inline: var(--ib-space-4);
+  min-height: 2.5rem;
+  font-weight: var(--ib-weight-semibold);
 }
+
+/* The header's icon buttons at 44px and its Subscribe button at 40px, as in the mockup. */
+.ib-app-header .ib-btn-icon-only { --ib-btn-h: 2.75rem; }
+.ib-app-header .ib-btn:not(.ib-btn-icon-only) { --ib-btn-h: 2.5rem; padding-inline: var(--ib-space-5); }
 .ib-header-nav-bar .ib-nav-item-active,
 .ib-header-nav-bar .ib-nav-item-active:hover {
   background-color: var(--ib-color-surface-container);
