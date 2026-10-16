@@ -27,7 +27,7 @@
                 <LinkButton Href="@project.RepoUrl" External Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.GitHub">Code on GitHub</LinkButton>
                 @if (project.DemoUrl is not null)
                 {
-                    <LinkButton Href="@project.DemoUrl" External Variant="ButtonVariant.Ghost" EndIcon="Hugeicons.LinkSquare02">Live demo</LinkButton>
+                    <LinkButton Href="@project.DemoUrl" External Variant="ButtonVariant.Ghost" EndIcon="Hugeicons.ExternalLink">Live demo</LinkButton>
                 }
             </Row>
         </Column>
@@ -87,7 +87,7 @@
                     {
                         <Column Gap="3">
                             <Heading Level="2" Size="TextSize.Sm">You'll learn</Heading>
-                            <List Icon="Hugeicons.Tick02" IconColor="Color.PrimaryText" Gap="2">
+                            <List Icon="Hugeicons.Check" IconColor="Color.PrimaryText" Gap="2">
                                 @foreach (var item in project.Learn)
                                 {
                                     <ListItem><TextBlock As="span" Size="TextSize.Sm">@item</TextBlock></ListItem>
