@@ -1,19 +1,18 @@
-# Deploys to Fly.io on every push to main. Needs a FLY_API_TOKEN repository secret
-# (create it with `fly tokens create deploy`).
-name: Deploy to Fly.io
+# See https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/
 
+name: Fly Deploy
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
-
-concurrency: deploy
-
+    branches:
+      - main
+      - master
 jobs:
   deploy:
+    name: Deploy app
     runs-on: ubuntu-latest
+    concurrency: deploy-group    # optional: ensure only one action runs at a time
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: flyctl deploy --remote-only
         env:
