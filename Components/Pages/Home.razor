@@ -13,7 +13,7 @@
     <Grid MinChildWidth="Length.Rem(25)" Gap="new() { Base = 10, Lg = 14 }" Align="Align.Center">
         <Column Gap="6">
             <Overline>The Blazor Roundup</Overline>
-            <Heading Level="1" class="edm-display" Wrap="TextWrap.Balance">What shipped in Blazor, and what to do about it.</Heading>
+            <Heading Level="1" class="edm-display" Wrap="TextWrap.Balance">What's happening in Blazor, every two weeks.</Heading>
             <TextBlock Size="TextSize.Lg" Color="Color.Muted" MaxWidth="Length.Rem(34)">@Description</TextBlock>
             <Column id="newsletter" Gap="2" MaxWidth="Length.Rem(30)">
                 <SignupForm FormName="signup-home" Source="home" />
@@ -143,12 +143,12 @@
 </Section>
 
 @code {
-    const string Description = "Every other Thursday: releases, security patches, component libraries and the best articles, each with a line on why it matters to your app. Free, from a developer who builds with Blazor every week.";
+    const string Description = "Releases, previews, component libraries, and the articles and discussions shaping what's next, each with a short summary and a link to the source. Free, every other Thursday.";
 
     // The issue's own sections, in the order they appear in it.
     static readonly (string Name, string About)[] Sections =
     [
-        ("Blazor", "Framework releases, previews and security patches, with what to do about each."),
+        ("Blazor", "Framework releases, previews and security patches."),
         ("Components & libraries", "New versions, breaking changes and license shifts across the ecosystem."),
         ("Articles & videos", "Fixes and tutorials worth your time."),
         (".NET & the web", "Tooling and browser changes that touch Blazor apps."),
