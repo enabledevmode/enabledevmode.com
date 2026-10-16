@@ -22,12 +22,12 @@
             <Row Gap="2" Wrap>
                 @if (project.VideoId is not null)
                 {
-                    <LinkButton Href="@project.VideoUrl" External StartIcon="Hugeicons.Play">Watch on YouTube</LinkButton>
+                    <LinkButton Href="@project.VideoUrl" External StartIcon="Lucide.Play">Watch on YouTube</LinkButton>
                 }
                 <LinkButton Href="@project.RepoUrl" External Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Brands.GitHub">Code on GitHub</LinkButton>
                 @if (project.DemoUrl is not null)
                 {
-                    <LinkButton Href="@project.DemoUrl" External Variant="ButtonVariant.Ghost" EndIcon="Hugeicons.ExternalLink">Live demo</LinkButton>
+                    <LinkButton Href="@project.DemoUrl" External Variant="ButtonVariant.Ghost" EndIcon="Lucide.ExternalLink">Live demo</LinkButton>
                 }
             </Row>
         </Column>
@@ -87,7 +87,7 @@
                     {
                         <Column Gap="3">
                             <Heading Level="2" Size="TextSize.Sm">You'll learn</Heading>
-                            <List Icon="Hugeicons.Check" IconColor="Color.PrimaryText" Gap="2">
+                            <List Icon="Lucide.Check" IconColor="Color.PrimaryText" Gap="2">
                                 @foreach (var item in project.Learn)
                                 {
                                     <ListItem><TextBlock As="span" Size="TextSize.Sm">@item</TextBlock></ListItem>
@@ -99,7 +99,7 @@
                     {
                         <Column Gap="3">
                             <Heading Level="2" Size="TextSize.Sm">Before you start</Heading>
-                            <List Icon="Hugeicons.Wrench01" IconColor="Color.Muted" Gap="2">
+                            <List Icon="Lucide.Wrench" IconColor="Color.Muted" Gap="2">
                                 @foreach (var item in project.Prerequisites)
                                 {
                                     <ListItem><TextBlock As="span" Size="TextSize.Sm">@item</TextBlock></ListItem>
@@ -126,7 +126,7 @@
 
     <Section Spacing="SectionSpacing.Sm" PaddingBottom="12">
         <Row Justify="Justify.Between" Align="Align.Center" Wrap Gap="4">
-            <LinkButton Href="/projects" Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Hugeicons.ArrowLeft02">All projects</LinkButton>
+            <LinkButton Href="/projects" Variant="ButtonVariant.Outline" Accent="Accent.Neutral" StartIcon="Lucide.ArrowLeft">All projects</LinkButton>
             @if (next is not null)
             {
                 <Column Gap="1" Align="Align.End">

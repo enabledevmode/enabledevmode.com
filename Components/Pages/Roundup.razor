@@ -23,7 +23,7 @@
         <Column Gap="0">
             <Row Justify="Justify.Between" Align="Align.Center" PaddingBottom="4">
                 <Heading Level="2" Size="TextSize.Xl">All issues</Heading>
-                <Anchor Href="/roundup/feed.xml" Underline="AnchorUnderline.Hover" Weight="FontWeight.Semibold"><Icon Name="Hugeicons.Rss" /> RSS feed</Anchor>
+                <Anchor Href="/roundup/feed.xml" Underline="AnchorUnderline.Hover" Weight="FontWeight.Semibold"><Icon Name="Lucide.Rss" /> RSS feed</Anchor>
             </Row>
             <Divider />
 
@@ -44,7 +44,7 @@
 
             @if (Archive.All.Count == 0)
             {
-                <EmptyState Icon="Hugeicons.Mail01" Title="The first issue is on its way" PaddingY="10"
+                <EmptyState Icon="Lucide.Mail" Title="The first issue is on its way" PaddingY="10"
                             Description="Subscribe above and it lands in your inbox. It shows up here the same day." />
             }
 
@@ -72,7 +72,7 @@
                             }
                         </Column>
                         <Box>
-                            <LinkButton Href="@issue.Url" Variant="ButtonVariant.Outline" Accent="Accent.Neutral" EndIcon="Hugeicons.ArrowRight02" aria-label="@($"Read issue #{issue.Number}")">Read</LinkButton>
+                            <LinkButton Href="@issue.Url" Variant="ButtonVariant.Outline" Accent="Accent.Neutral" EndIcon="Lucide.ArrowRight" aria-label="@($"Read issue #{issue.Number}")">Read</LinkButton>
                         </Box>
                     </Grid>
                     <Divider />
